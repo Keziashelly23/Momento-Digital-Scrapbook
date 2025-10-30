@@ -7,13 +7,13 @@
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header> 
-        <nav> 
-            <h1> Momento </h1>
-            <a href ="login.html" class="login-btn">login</a>
-        </nav>
-    </header>
+<body onload="loadJournals(); showDashboard();">
 
+  <h1>📓 My Journals</h1>
+  <div id="dashboard" class="dashboard"></div>
 
+  <button onclick="createNewJournal()" class="create-btn">+ Create New Journal</button>
+
+  <script src="script.js"></script>
 </body>
+</html>

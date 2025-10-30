@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Journal Editor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body onload="loadJournals(); loadEditor();">
+
+  <h1 id="journal-title"></h1>
+
+  <div class="editor-controls">
+    <button onclick="prevPage()">← Prev</button>
+    <button onclick="nextPage()">Next →</button>
+    <button onclick="addPage()">+ Add Page</button>
+    <button onclick="saveJournals()">💾 Save</button>
+    <button onclick="goHome()">🏠 Back</button>
+  </div>
+
+  <div id="page" class="journal-page" contenteditable="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
