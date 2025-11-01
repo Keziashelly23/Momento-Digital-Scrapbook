@@ -1,0 +1,50 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+}
+
+/* Left and right halves */
+#left-side, #right-side {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+#left-side {
+  background: #ffd3e2;
+}
+
+#right-side {
+  background: #fff0d9;
+  overflow: hidden; /* keeps stickers from escaping visually */
+}
+
+/* Sticker style */
+.sticker {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: move;
+}
+
+.sticker img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none; /* ensures dragging works over the image */
+}
+
+#left-content{
+  margin: 40px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 40px;
+  height: 88%;
+}
