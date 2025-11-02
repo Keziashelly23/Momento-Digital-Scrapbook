@@ -9,40 +9,29 @@ function saveJournals() {
 }
 
 // ---------- Dashboard Logic ----------
-
-// Load existing journals from localStorage or start with an empty array
-let journals = JSON.parse(localStorage.getItem('journals')) || [];
-
-// Save journals to localStorage
-function saveJournals() {
-  localStorage.setItem('journals', JSON.stringify(journals));
-}
-
-// Display all journals on the dashboard
 function showDashboard() {
   const dashboard = document.getElementById('dashboard');
   if (!dashboard) return;
 
-  // Clear previous content
   dashboard.innerHTML = '';
 
-  // If no journals exist, show a message
   if (journals.length === 0) {
     dashboard.innerHTML = `<p class="no-journals">No journals yet. Create one to get started!</p>`;
     return;
   }
 
-  // Loop through each journal and display it
   journals.forEach(journal => {
     const el = document.createElement('div');
     el.className = 'journal-cover';
+
     el.innerHTML = `
-      <div class="cover" style="background-image: url('${journal.coverImage}')">
-        <h3>${journal.title}</h3>
+      <div class="journal">
+        <img src="images/layer1.svg" alt="Notebook">
+        <img src="images/g6838.svg" class="spiral" alt="Spiral Binding">
       </div>
+      <h3>${journal.title}</h3>
     `;
 
-    // Create the "Open" button
     const button = document.createElement('button');
     button.textContent = 'Open';
     button.addEventListener('click', () => openJournal(journal.id));
@@ -56,13 +45,12 @@ function showDashboard() {
 function createNewJournal() {
   const title = prompt("Enter journal title:");
 
-  // Stop if user cancels
   if (title === null) return;
 
   const newJournal = {
     id: Date.now(),
     title: title.trim() || "Untitled Journal",
-    coverImage: "https://i.imgur.com/3R9Xn5L.png", // default cover
+    coverImage: "https://i.imgur.com/3R9Xn5L.png",
     pages: [
       { id: 1, content: "", background: "#fff" }
     ]
@@ -73,15 +61,12 @@ function createNewJournal() {
   showDashboard();
 }
 
-// Open a journal and go to the editor page
 function openJournal(id) {
   localStorage.setItem('activeJournalId', id);
   window.location.href = 'editor.html';
 }
 
-// Call this when the page loads to show existing journals
 document.addEventListener('DOMContentLoaded', showDashboard);
-
 
 // ---------- Editor Logic ----------
 let currentJournal = null;

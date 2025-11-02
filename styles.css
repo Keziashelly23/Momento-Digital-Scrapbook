@@ -1,0 +1,98 @@
+/* ---------------- GLOBAL STYLES ---------------- */
+body {
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+/* ---------------- DASHBOARD LAYOUT ---------------- */
+#dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 50px;
+  padding: 20px;
+}
+
+/* Each journal + title + button */
+.journal-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 180px;
+}
+
+/* ---------------- JOURNAL NOTEBOOK ---------------- */
+.journal {
+  position: relative;
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 3 / 4;
+}
+
+/* Notebook SVG */
+.journal img:first-child {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Spiral SVG overlay */
+.journal .spiral {
+  position: absolute;
+  top: 0;
+  left: -3%;
+  height: 100%;
+  width: auto;
+  pointer-events: none;
+}
+
+/* ---------------- BUTTONS ---------------- */
+button,
+.create-btn {
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  border: none;
+  background: #4a90e2;
+  color: white;
+  margin-top: 10px;
+}
+
+button:hover,
+.create-btn:hover {
+  background: #357ab8;
+}
+
+.create-btn {
+  margin-top: 60px;
+}
+
+/* ---------------- EDITOR PAGE ---------------- */
+.journal-page {
+  width: 80%;
+  margin: 20px auto;
+  background: white;
+  min-height: 400px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: left;
+  overflow-y: auto;
+}
+
+.editor-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
