@@ -5,7 +5,7 @@
   <title>Journal Editor</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body onload="loadJournals(); loadEditor();">
+<body>
 
   <h1 id="journal-title"></h1>
 
@@ -19,6 +19,25 @@
 
   <div id="page" class="journal-page" contenteditable="true"></div>
 
+  <!-- Firebase compat SDK and config (loads Firestore) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
   <script src="script.js"></script>
+  <script>
+    // Ensure journals are loaded from Firestore/localStorage before opening the editor
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (typeof loadJournals === 'function') {
+        try {
+          await loadJournals();
+        } catch (e) {
+          // loadJournals may be synchronous or asynchronous; ignore errors here
+          console.warn('loadJournals warning:', e);
+        }
+      }
+      if (typeof loadEditor === 'function') loadEditor();
+    });
+  </script>
 </body>
 </html>

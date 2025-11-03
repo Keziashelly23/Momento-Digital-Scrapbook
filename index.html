@@ -3,17 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momento</title>
-    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <title>Login - Scrapbook</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
-<body onload="loadJournals(); showDashboard();">
-
-  <h1>📓 My Journals</h1>
-  <div id="dashboard" class="dashboard"></div>
-
-  <button onclick="createNewJournal()" class="create-btn">+ Create New Journal</button>
-
-  <script src="script.js"></script>
+<body>
+    <header>
+        <nav>
+            <h1>Scrapbook</h1>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+    <main class="login">
+        <section class="login-section">
+            <h2>Login to Scrapbook</h2>
+            <p>Sign in with your Google account to access your journals.</p>
+            <div id="g_id_onload"
+                 data-client_id="509638925342-953hod3rmrdhg7c3njk5afu28jre5fhf.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Scrapbook. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>

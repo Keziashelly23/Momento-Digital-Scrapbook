@@ -1,20 +1,45 @@
-// Load/save journals from localStorage
-function loadJournals() {
-  const data = localStorage.getItem('journals');
-  if (data) journals = JSON.parse(data);
+
+// Google Sign-In handler
+function handleCredentialResponse(response) {
+  try {
+    const jwt = response.credential;
+    const payload = JSON.parse(atob(jwt.split('.')[1])); // decode payload
+    
+    // Store user data in sessionStorage
+    sessionStorage.setItem('user', JSON.stringify({
+      id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      picture: payload.picture
+    }));
+
+    // Redirect to create.html after successful login
+    window.location.href = 'create.html';
+  } catch (err) {
+    console.error('Failed to decode credential:', err);
+    alert('Sign-in failed. Please try again.');
+  }
 }
 
-function saveJournals() {
-  localStorage.setItem('journals', JSON.stringify(journals));
-}
+// Storage: prefer Firestore when a signed-in user exists, otherwise fall back to localStorage.
+async function loadJournals() {
+  const userStr = sessionStorage.getItem('user');
+  // If Firestore is available and a user is signed in, load from Firestore
+  if (userStr && window.db) {
+    try {
+      const user = JSON.parse(userStr);
+      console.log('Loading journals from Firebase for user:', user.id);
+      const ref = db.collection('users').doc(user.id);
+      const snap = await ref.get();
+      journals = (snap.exists && snap.data().journals) ? snap.data().journals : [];
+      console.log('Loaded from Firebase:', journals);
+      return journals;
+    } catch (err) {
+      console.error('Failed to load journals from Firestore, falling back to localStorage:', err);
+    }
+  }
 
-// ---------- Dashboard Logic ----------
-
-// Global journal array
-let journals = [];
-
-// Load/save journals from localStorage
-function loadJournals() {
+  // Fallback: localStorage
   const data = localStorage.getItem('journals');
   if (data) {
     try {
@@ -26,11 +51,33 @@ function loadJournals() {
   } else {
     journals = [];
   }
+  return journals;
 }
 
-function saveJournals() {
-  localStorage.setItem('journals', JSON.stringify(journals));
+async function saveJournals() {
+  const userStr = sessionStorage.getItem('user');
+  // If Firestore is available and a user is signed in, save to Firestore
+  if (userStr && window.db) {
+    try {
+      const user = JSON.parse(userStr);
+      const ref = db.collection('users').doc(user.id);
+      console.log('Saving journals to Firebase for user:', user.id, journals);
+      await ref.set({ journals: journals });
+      console.log('Successfully saved to Firebase!');
+      return;
+    } catch (err) {
+      console.error('Failed to save journals to Firestore, falling back to localStorage:', err);
+    }
+  }
+
+
 }
+
+// ---------- Dashboard Logic ----------
+
+// Global journal array
+let journals = [];
+
 
 // Display the dashboard
 function showDashboard() {
@@ -96,9 +143,15 @@ function openJournal(id) {
 }
 
 // Initialize dashboard when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  loadJournals();
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadJournals();
   showDashboard();
+
+  // Add event listener for create journal button
+  const createButton = document.getElementById('createJournalBtn');
+  if (createButton) {
+    createButton.addEventListener('click', createNewJournal);
+  }
 });
 
 // ---------- Editor Logic ----------
@@ -165,5 +218,5 @@ function addPage() {
 
 function goHome() {
   saveJournals();
-  window.location.href = 'index.html';
+  window.location.href = 'create.html';
 }
