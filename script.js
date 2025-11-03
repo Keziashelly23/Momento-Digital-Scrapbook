@@ -9,6 +9,30 @@ function saveJournals() {
 }
 
 // ---------- Dashboard Logic ----------
+
+// Global journal array
+let journals = [];
+
+// Load/save journals from localStorage
+function loadJournals() {
+  const data = localStorage.getItem('journals');
+  if (data) {
+    try {
+      journals = JSON.parse(data);
+    } catch (err) {
+      console.error("Error parsing journals from localStorage:", err);
+      journals = [];
+    }
+  } else {
+    journals = [];
+  }
+}
+
+function saveJournals() {
+  localStorage.setItem('journals', JSON.stringify(journals));
+}
+
+// Display the dashboard
 function showDashboard() {
   const dashboard = document.getElementById('dashboard');
   if (!dashboard) return;
@@ -26,8 +50,13 @@ function showDashboard() {
 
     el.innerHTML = `
       <div class="journal">
-        <img src="images/layer1.svg" alt="Notebook">
-        <img src="images/g6838.svg" class="spiral" alt="Spiral Binding">
+        <div>
+          <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z" fill="#E6BDDC" stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <img src="images/journalspirals.svg" class="spiral" alt="Spiral Binding">
+        <img src="images/journalpages.svg" class="journal-pages" alt="Journal Pages">
       </div>
       <h3>${journal.title}</h3>
     `;
@@ -44,7 +73,6 @@ function showDashboard() {
 // Create a new journal
 function createNewJournal() {
   const title = prompt("Enter journal title:");
-
   if (title === null) return;
 
   const newJournal = {
@@ -61,12 +89,17 @@ function createNewJournal() {
   showDashboard();
 }
 
+// Open a journal in the editor
 function openJournal(id) {
   localStorage.setItem('activeJournalId', id);
   window.location.href = 'editor.html';
 }
 
-document.addEventListener('DOMContentLoaded', showDashboard);
+// Initialize dashboard when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  loadJournals();
+  showDashboard();
+});
 
 // ---------- Editor Logic ----------
 let currentJournal = null;
