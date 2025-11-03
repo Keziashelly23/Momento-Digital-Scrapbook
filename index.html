@@ -14,6 +14,28 @@
 
   <button onclick="createNewJournal()" class="create-btn">+ Create New Journal</button>
 
+  <!-- Create Journal Modal -->
+  <div id="createJournalModal" class="modal">
+    <div class="modal-content">
+      <h2>Create a New Journal</h2>
+      <label>
+        Journal Title:
+        <input type="text" id="journalTitle" placeholder="Enter journal title" />
+      </label>
+      <br>
+      <label>
+        Choose Cover Color:
+        <input type="color" id="journalColor" value="#E6BDDC" />
+      </label>
+      <br><br>
+      <div class="modal-buttons">
+        <button id="createJournalConfirm">Create</button>
+        <button id="createJournalCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
   <script src="script.js"></script>
 </body>
 </html>

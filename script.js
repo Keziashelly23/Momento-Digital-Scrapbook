@@ -52,7 +52,7 @@ function showDashboard() {
       <div class="journal">
         <div>
           <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z" fill="#E6BDDC" stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
+            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z" fill="${journal.coverColor || '#E6BDDC'}" stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
           </svg>
         </div>
         <img src="images/journalspirals.svg" class="spiral" alt="Spiral Binding">
@@ -72,21 +72,52 @@ function showDashboard() {
 
 // Create a new journal
 function createNewJournal() {
-  const title = prompt("Enter journal title:");
-  if (title === null) return;
+  const modal = document.getElementById('createJournalModal');
+  const titleInput = document.getElementById('journalTitle');
+  const colorInput = document.getElementById('journalColor');
+  const confirmBtn = document.getElementById('createJournalConfirm');
+  const cancelBtn = document.getElementById('createJournalCancel');
 
-  const newJournal = {
-    id: Date.now(),
-    title: title.trim() || "Untitled Journal",
-    coverImage: "https://i.imgur.com/3R9Xn5L.png",
-    pages: [
-      { id: 1, content: "", background: "#fff" }
-    ]
+  // Reset modal fields
+  titleInput.value = '';
+  colorInput.value = '#E6BDDC';
+
+  // Show modal
+  modal.style.display = 'flex';
+
+  // Confirm button
+  confirmBtn.onclick = () => {
+    const title = titleInput.value.trim() || "Untitled Journal";
+    const coverColor = colorInput.value;
+
+    const newJournal = {
+      id: Date.now(),
+      title,
+      coverColor,
+      coverImage: "https://i.imgur.com/3R9Xn5L.png",
+      pages: [
+        { id: 1, content: "", background: "#fff" }
+      ]
+    };
+
+    journals.push(newJournal);
+    saveJournals();
+    showDashboard();
+
+    modal.style.display = 'none';
   };
 
-  journals.push(newJournal);
-  saveJournals();
-  showDashboard();
+  // Cancel button
+  cancelBtn.onclick = () => {
+    modal.style.display = 'none';
+  };
+
+  // Close modal if user clicks outside it
+  window.onclick = (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
 }
 
 // Open a journal in the editor
