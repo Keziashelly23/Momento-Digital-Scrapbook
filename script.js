@@ -141,7 +141,7 @@ function loadEditor() {
   currentJournal = journals.find(j => j.id == id);
   if (!currentJournal) {
     alert("Journal not found!");
-    window.location.href = 'index.html';
+    window.location.href = 'dashboard.html';
     return;
   }
 
@@ -196,5 +196,5 @@ function addPage() {
 
 function goHome() {
   saveJournals();
-  window.location.href = 'index.html';
+  window.location.href = 'dashboard.html';
 }
