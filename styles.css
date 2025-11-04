@@ -2,10 +2,37 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: borel;
+  src: url(font/Borel/Borel-Regular.ttf);
+}
+
+@font-face {
+  font-family: momo;
+  src: url(font/Momo_Signature/MomoSignature-Regular.ttf);
+}
+
+@font-face {
+  font-family: nanum;
+  src: url(font/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
+}
+
 body {
   margin: 0;
   height: 100vh;
   display: flex;
+}
+
+nav a{
+  background-color: #f4b0c6;
+  border-radius: 40px;
+  border-color: black;
+  text-decoration: none;
+  padding: 10px;
+  color: #494949;
+  font-weight: bold;
+  font-family: nanum;
+  font-size: large;
 }
 
 /* Left and right halves */
