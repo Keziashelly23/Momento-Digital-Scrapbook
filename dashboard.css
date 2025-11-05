@@ -1,3 +1,16 @@
+/* ---------------- GLOBAL STYLES ---------------- */
+body {
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
 /* ---------------- DASHBOARD LAYOUT ---------------- */
 #dashboard {
   display: flex;

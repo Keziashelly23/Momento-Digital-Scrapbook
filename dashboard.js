@@ -1,4 +1,3 @@
-
 // Load/save journals from localStorage
 function loadJournals() {
   const data = localStorage.getItem('journals');
@@ -8,8 +7,6 @@ function loadJournals() {
 function saveJournals() {
   localStorage.setItem('journals', JSON.stringify(journals));
 }
-
-
 
 // ---------- Dashboard Logic ----------
 

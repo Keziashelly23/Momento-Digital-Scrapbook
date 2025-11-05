@@ -13,37 +13,53 @@ h1 {
 /* ---------------- Landing Page LAYOUT ---------------- */
 
 /* google button */
+.login-section {
+  background-color: #fff7fb;
+  border: 2px solid #ffcce0;
+  border-radius: 20px;
+  padding: 40px;
+  width: 400px;
+  margin: 80px auto;
+  box-shadow: 0px 8px 20px rgba(255, 192, 203, 0.3);
+}
 
-.google-btn {
+.g_id_signin {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #fff;
-  color: #444;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.google-btn img {
-  width: 20px;
-  height: 20px;
+.g_id_signin:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 4px 15px rgba(255, 182, 193, 0.4);
 }
 
-.google-btn:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px);
+footer {
+  text-align: center;
+  font-family: "nanum", sans-serif;
+  color: #777;
+  margin-top: 30px;
+  font-size: 14px;
+}
+.login-card {
+  background-color: #fff0f7;
+  border-radius: 16px;
+  padding: 25px;
+  border: 1.5px dashed #ff9ecf;
+  text-align: center;
+  position: relative;
 }
 
-.google-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+.login-card::before {
+  content: "🎀";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
 }
-
 
 * {
   box-sizing: border-box;
