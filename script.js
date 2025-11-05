@@ -1,200 +1,71 @@
-// Load/save journals from localStorage
-function loadJournals() {
-  const data = localStorage.getItem('journals');
-  if (data) journals = JSON.parse(data);
-}
 
-function saveJournals() {
-  localStorage.setItem('journals', JSON.stringify(journals));
-}
+//Landing Page functions
+makeDraggable(document.querySelectorAll(".sticker"));
 
-// ---------- Dashboard Logic ----------
+function makeDraggable(elements) {
+  elements.forEach(elmnt => {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const parent = elmnt.parentElement; // this is the #right-side div
 
-// Global journal array
-let journals = [];
+    elmnt.onmousedown = dragMouseDown;
 
-// Load/save journals from localStorage
-function loadJournals() {
-  const data = localStorage.getItem('journals');
-  if (data) {
-    try {
-      journals = JSON.parse(data);
-    } catch (err) {
-      console.error("Error parsing journals from localStorage:", err);
-      journals = [];
+    function dragMouseDown(e) {
+      e.preventDefault();
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
     }
-  } else {
-    journals = [];
-  }
-}
 
-function saveJournals() {
-  localStorage.setItem('journals', JSON.stringify(journals));
-}
+    function elementDrag(e) {
+      e.preventDefault();
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
 
-// Display the dashboard
-function showDashboard() {
-  const dashboard = document.getElementById('dashboard');
-  if (!dashboard) return;
+      let newTop = elmnt.offsetTop - pos2;
+      let newLeft = elmnt.offsetLeft - pos1;
 
-  dashboard.innerHTML = '';
+      // parent boundaries
+      const parentRect = parent.getBoundingClientRect();
+      const elemRect = elmnt.getBoundingClientRect();
 
-  if (journals.length === 0) {
-    dashboard.innerHTML = `<p class="no-journals">No journals yet. Create one to get started!</p>`;
-    return;
-  }
+      const minLeft = 0;
+      const maxLeft = parent.clientWidth - elemRect.width;
+      const minTop = 0;
+      const maxTop = parent.clientHeight - elemRect.height;
 
-  journals.forEach(journal => {
-    const el = document.createElement('div');
-    el.className = 'journal-cover';
+      // keep inside parent
+      if (newLeft < minLeft) newLeft = minLeft;
+      if (newLeft > maxLeft) newLeft = maxLeft;
+      if (newTop < minTop) newTop = minTop;
+      if (newTop > maxTop) newTop = maxTop;
 
-    el.innerHTML = `
-      <div class="journal">
-        <div>
-          <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z" fill="${journal.coverColor || '#E6BDDC'}" stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <img src="images/journalspirals.svg" class="spiral" alt="Spiral Binding">
-        <img src="images/journalpages.svg" class="journal-pages" alt="Journal Pages">
-      </div>
-      <h3>${journal.title}</h3>
-    `;
+      elmnt.style.top = newTop + "px";
+      elmnt.style.left = newLeft + "px";
+    }
 
-    const button = document.createElement('button');
-    button.textContent = 'Open';
-    button.addEventListener('click', () => openJournal(journal.id));
-
-    el.appendChild(button);
-    dashboard.appendChild(el);
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
   });
 }
 
-// Create a new journal
-function createNewJournal() {
-  const modal = document.getElementById('createJournalModal');
-  const titleInput = document.getElementById('journalTitle');
-  const colorInput = document.getElementById('journalColor');
-  const confirmBtn = document.getElementById('createJournalConfirm');
-  const cancelBtn = document.getElementById('createJournalCancel');
-
-  // Reset modal fields
-  titleInput.value = '';
-  colorInput.value = '#E6BDDC';
-
-  // Show modal
-  modal.style.display = 'flex';
-
-  // Confirm button
-  confirmBtn.onclick = () => {
-    const title = titleInput.value.trim() || "Untitled Journal";
-    const coverColor = colorInput.value;
-
-    const newJournal = {
-      id: Date.now(),
-      title,
-      coverColor,
-      coverImage: "https://i.imgur.com/3R9Xn5L.png",
-      pages: [
-        { id: 1, content: "", background: "#fff" }
-      ]
-    };
-
-    journals.push(newJournal);
-    saveJournals();
-    showDashboard();
-
-    modal.style.display = 'none';
-  };
-
-  // Cancel button
-  cancelBtn.onclick = () => {
-    modal.style.display = 'none';
-  };
-
-  // Close modal if user clicks outside it
-  window.onclick = (e) => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
-    }
-  };
+function handleCredentialResponse(response) {
+  //Google sends the ID token in 'response .creditional'
+  const credential = response.creditional;
 }
 
-// Open a journal in the editor
-function openJournal(id) {
-  localStorage.setItem('activeJournalId', id);
-  window.location.href = 'editor.html';
+function handleCredentialResponse(response) {
+  console.log("login successful", response);
+  localStorage.setItem("googleCredential", response.credential);
+
+  window.location.href = "dashboard.html";
 }
 
-// Initialize dashboard when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  loadJournals();
-  showDashboard();
-});
 
-// ---------- Editor Logic ----------
-let currentJournal = null;
-let currentPageIndex = 0;
 
-function loadEditor() {
-  const id = localStorage.getItem('activeJournalId');
-  currentJournal = journals.find(j => j.id == id);
-  if (!currentJournal) {
-    alert("Journal not found!");
-    window.location.href = 'dashboard.html';
-    return;
-  }
 
-  document.getElementById('journal-title').textContent = currentJournal.title;
-  loadPage(currentPageIndex);
-}
 
-function loadPage(index) {
-  const pageDiv = document.getElementById('page');
-  if (!currentJournal.pages[index]) return;
-
-  const page = currentJournal.pages[index];
-  pageDiv.innerHTML = page.content;
-  pageDiv.style.background = page.background;
-
-  // Save page content on change
-  pageDiv.oninput = function() {
-    currentJournal.pages[index].content = pageDiv.innerHTML;
-    saveJournals();
-  };
-}
-
-function nextPage() {
-  if (currentPageIndex < currentJournal.pages.length - 1) {
-    currentPageIndex++;
-    loadPage(currentPageIndex);
-  } else {
-    alert("You're on the last page!");
-  }
-}
-
-function prevPage() {
-  if (currentPageIndex > 0) {
-    currentPageIndex--;
-    loadPage(currentPageIndex);
-  } else {
-    alert("You're on the first page!");
-  }
-}
-
-function addPage() {
-  const newPage = {
-    id: Date.now(),
-    content: "",
-    background: "#fff"
-  };
-  currentJournal.pages.push(newPage);
-  currentPageIndex = currentJournal.pages.length - 1;
-  saveJournals();
-  loadPage(currentPageIndex);
-}
-
-function goHome() {
-  saveJournals();
-  window.location.href = 'dashboard.html';
-}
