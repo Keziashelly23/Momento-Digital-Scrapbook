@@ -123,7 +123,7 @@ function createNewJournal() {
 // Open a journal in the editor
 function openJournal(id) {
   localStorage.setItem('activeJournalId', id);
-  window.location.href = 'editor.html';
+  window.location.href = 'canvas.html';
 }
 
 // Initialize dashboard when DOM is ready
@@ -132,69 +132,3 @@ document.addEventListener('DOMContentLoaded', () => {
   showDashboard();
 });
 
-// ---------- Editor Logic ----------
-let currentJournal = null;
-let currentPageIndex = 0;
-
-function loadEditor() {
-  const id = localStorage.getItem('activeJournalId');
-  currentJournal = journals.find(j => j.id == id);
-  if (!currentJournal) {
-    alert("Journal not found!");
-    window.location.href = 'dashboard.html';
-    return;
-  }
-
-  document.getElementById('journal-title').textContent = currentJournal.title;
-  loadPage(currentPageIndex);
-}
-
-function loadPage(index) {
-  const pageDiv = document.getElementById('page');
-  if (!currentJournal.pages[index]) return;
-
-  const page = currentJournal.pages[index];
-  pageDiv.innerHTML = page.content;
-  pageDiv.style.background = page.background;
-
-  // Save page content on change
-  pageDiv.oninput = function() {
-    currentJournal.pages[index].content = pageDiv.innerHTML;
-    saveJournals();
-  };
-}
-
-function nextPage() {
-  if (currentPageIndex < currentJournal.pages.length - 1) {
-    currentPageIndex++;
-    loadPage(currentPageIndex);
-  } else {
-    alert("You're on the last page!");
-  }
-}
-
-function prevPage() {
-  if (currentPageIndex > 0) {
-    currentPageIndex--;
-    loadPage(currentPageIndex);
-  } else {
-    alert("You're on the first page!");
-  }
-}
-
-function addPage() {
-  const newPage = {
-    id: Date.now(),
-    content: "",
-    background: "#fff"
-  };
-  currentJournal.pages.push(newPage);
-  currentPageIndex = currentJournal.pages.length - 1;
-  saveJournals();
-  loadPage(currentPageIndex);
-}
-
-function goHome() {
-  saveJournals();
-  window.location.href = 'dashboard.html';
-}

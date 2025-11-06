@@ -1,0 +1,72 @@
+/* Journal Canvas Layout */
+.journal-body {
+  margin: 0;
+  background-color: #fdfcfb;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #fff5ec;
+  border-right: 1px solid #ddd;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0;
+  gap: 18px;
+}
+
+/* Journal Container */
+.journal-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 30px;
+}
+
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+
+/* Pages */
+.journal-pages {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+
+.page {
+  width: 45%;
+  height: 90%;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
+
+
+/* Footer */
+.journal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 0;
+  gap: 10px;
+}
+
