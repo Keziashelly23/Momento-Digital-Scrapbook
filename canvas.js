@@ -11,6 +11,42 @@ const cancelFontBtn = document.getElementById("cancelFontBtn");
 let history = [];
 let redoStack = [];
 
+// --- Mode detection ---
+const journalId = localStorage.getItem('activeJournalId');
+const mode = localStorage.getItem('journalMode'); // 'edit' or 'view'
+
+const journals = JSON.parse(localStorage.getItem('journals')) || [];
+let activeJournal = null;
+
+if (journalId) {
+  activeJournal = journals.find(j => j.id == journalId);
+}
+
+// Apply mode restrictions
+if (mode === 'view') {
+  disableEditing();
+} else {
+  enableEditing();
+}
+
+// Functions to enable/disable editing
+function enableEditing() {
+  addTextBtn.style.display = 'inline-block';
+  undoBtn.disabled = false;
+  redoBtn.disabled = false;
+}
+
+function disableEditing() {
+  addTextBtn.style.display = 'none';
+  undoBtn.disabled = true;
+  redoBtn.disabled = true;
+
+  // Make existing text boxes read-only
+  document.querySelectorAll(".text-box").forEach(box => {
+    box.contentEditable = false;
+  });
+}
+
 // Save current state
 function saveState() {
   history.push(rightPage.innerHTML);

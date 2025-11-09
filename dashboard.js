@@ -50,9 +50,15 @@ function showDashboard() {
 
     el.innerHTML = `
       <div class="journal">
+        <div class="journal-overlay">
+          <button class="overlay-btn view-btn">View</button>
+          <button class="overlay-btn edit-btn">Edit</button>
+        </div>
         <div>
           <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z" fill="${journal.coverColor || '#E6BDDC'}" stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
+            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z"
+              fill="${journal.coverColor || '#E6BDDC'}"
+              stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
           </svg>
         </div>
         <img src="images/journalspirals.svg" class="spiral" alt="Spiral Binding">
@@ -61,11 +67,12 @@ function showDashboard() {
       <h3>${journal.title}</h3>
     `;
 
-    const button = document.createElement('button');
-    button.textContent = 'Open';
-    button.addEventListener('click', () => openJournal(journal.id));
+    const viewBtn = el.querySelector('.view-btn');
+    const editBtn = el.querySelector('.edit-btn');
 
-    el.appendChild(button);
+    viewBtn.addEventListener('click', () => viewJournal(journal.id));
+    editBtn.addEventListener('click', () => editJournal(journal.id));
+
     dashboard.appendChild(el);
   });
 }
@@ -120,9 +127,56 @@ function createNewJournal() {
   };
 }
 
-// Open a journal in the editor
+// Open Edit Journal modal
+function editJournal(journalId) {
+  const modal = document.getElementById('editJournalModal');
+  const titleInput = document.getElementById('editJournalTitle');
+  const colorInput = document.getElementById('editJournalColor');
+  const saveBtn = document.getElementById('editJournalSave');
+  const skipBtn = document.getElementById('editJournalSkip');
+  const cancelBtn = document.getElementById('editJournalCancel');
+
+  // Find the journal by ID
+  const journal = journals.find(j => j.id === journalId);
+  if (!journal) return;
+
+  // Pre-fill fields with current values
+  titleInput.value = journal.title;
+  colorInput.value = journal.coverColor || '#E6BDDC';
+
+  // Show modal
+  modal.style.display = 'flex';
+
+  // Save button
+  saveBtn.onclick = () => {
+    journal.title = titleInput.value.trim() || "Untitled Journal";
+    journal.coverColor = colorInput.value;
+    saveJournals();
+    showDashboard();
+    modal.style.display = 'none';
+  };
+
+  // Skip button (go to canvas in edit mode)
+  skipBtn.onclick = () => {
+    localStorage.setItem('activeJournalId', journal.id);
+    localStorage.setItem('journalMode', 'edit');
+    window.location.href = 'canvas.html';
+  };
+
+  // Cancel button
+  cancelBtn.onclick = () => {
+    modal.style.display = 'none';
+  };
+
+  // Close modal if clicking outside
+  window.onclick = (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  };
+}
+
 function openJournal(id) {
   localStorage.setItem('activeJournalId', id);
+  localStorage.setItem('journalMode', 'view'); // NEW: view-only mode
   window.location.href = 'canvas.html';
 }
 

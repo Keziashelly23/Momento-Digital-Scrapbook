@@ -107,6 +107,85 @@ h1 {
   pointer-events: none;
 }
 
+/* Ensure correct stacking order */
+.journal {
+  position: relative;
+  z-index: 0;
+  cursor: pointer;
+}
+
+/* Overlay container (hidden background by default) */
+.journal-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 4;
+}
+
+/* Background only fades in on hover */
+.journal-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 8px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* When hovering over journal — fade in both overlay + buttons */
+.journal:hover .journal-overlay,
+.journal-overlay:hover .overlay-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.journal:hover .journal-overlay::before,
+.journal-overlay:hover::before {
+  opacity: 1;
+}
+
+.journal:hover .overlay-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Buttons styling */
+.overlay-btn {
+  background: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 5;
+  opacity: 0;
+  color: #333;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Fade and slide in buttons on hover */
+.journal:hover .overlay-btn,
+.journal-overlay:hover .overlay-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Button hover style */
+.overlay-btn:hover {
+  background: #ffe1f0;
+  color: #e13f88;
+}
+
 /* ---------------- BUTTONS ---------------- */
 button,
 .create-btn {
