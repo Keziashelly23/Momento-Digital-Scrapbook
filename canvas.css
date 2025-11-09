@@ -51,7 +51,7 @@
 }
 
 .page {
-  width: 45%;
+  width: 47%;
   height: 90%;
   border: 1px solid #ddd;
   background-color: #fff;
@@ -60,6 +60,37 @@
   box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
 
+.journal-pages {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Spiral Binding */
+.spiral-binding {
+  position: absolute;
+  height: 85%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Page Layers */
+.left-page {
+  z-index: 1;
+  transform: translateX(5px);
+}
+
+.right-page {
+  z-index: 1;
+  transform: translateX(-5px);
+}
+
+.spiral-binding {
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 /* Footer */
 .journal-footer {
