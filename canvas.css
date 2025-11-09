@@ -203,3 +203,37 @@ b
   background-color: #aaa;
 }
 
+.image-frame {
+  position: absolute;
+  border: 1px solid transparent;
+  cursor: move;
+  user-select: none;
+}
+
+.image-frame.active {
+  border: 1px solid #333;
+}
+
+.resize, .rotate {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  font-size: 20px;
+  user-select: none;
+  cursor: pointer;
+}
+.resize {
+  bottom: -20px;
+  right: -10px;
+}
+
+.rotate {
+  top: -20px;
+}
+
+.image-frame .resize, .image-frame .rotate{
+  display: none;
+}
+.image-frame.active .resize, .image-frame.active .rotate {
+  display: block;
+}
