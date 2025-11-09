@@ -9,8 +9,9 @@
 <body class="journal-body">
   <!-- Sidebar -->
   <aside class="sidebar">
-    <button title="Undo">↩</button>
-    <button title="Redo">↪</button>
+      <button class="tool-btn" id="undoBtn" title="Undo">↶</button>
+      <button class="tool-btn" id="redoBtn" title="Redo">↷</button>
+      <button class="tool-btn" id="addTextBtn" title="Add Text">T</button>
   </aside>
 
   <!-- Main Journal Area -->
@@ -25,6 +26,31 @@
 
 
   </main>
+
+  <!-- Font Settings Popup -->
+  <div id="fontPopup" class="popup">
+    <div class="popup-content">
+      <h3>Font Settings</h3>
+      <div class="font-controls">
+        <label for="fontSize">Size:</label>
+        <input type="number" id="fontSize" value="16" min="8" max="72">
+        <label for="fontFamily">Font:</label>
+        <select id="fontFamily">
+          <option value="Segoe UI, sans-serif">Segoe UI</option>
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Times New Roman, serif">Times New Roman</option>
+          <option value="Courier New, monospace">Courier New</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+          <option value="Helvetica, sans-serif">Helvetica</option>
+          <option value="Impact, sans-serif">Impact</option>
+          <option value="Comic Sans MS, cursive">Comic Sans</option>
+        </select>
+      </div>
+      <button id="applyFontBtn">Add Text</button>
+      <button id="cancelFontBtn">Cancel</button>
+    </div>
+  </div>
 
   <script src="canvas.js"></script>
 </body>
