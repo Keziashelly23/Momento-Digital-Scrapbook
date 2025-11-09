@@ -12,12 +12,14 @@
 .sidebar {
   background-color: #fff5ec;
   border-right: 1px solid #ddd;
-  width: 6%;
+  width: 8%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 15px 0;
   gap: 18px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
 }
 
 b
