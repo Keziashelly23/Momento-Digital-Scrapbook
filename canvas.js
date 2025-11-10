@@ -2,11 +2,8 @@ const rightPage = document.getElementById("rightPage");
 const addTextBtn = document.getElementById("addTextBtn");
 const undoBtn = document.getElementById("undoBtn");
 const redoBtn = document.getElementById("redoBtn");
-const fontPopup = document.getElementById("fontPopup");
-const fontSizeInput = document.getElementById("fontSize");
-const fontFamilySelect = document.getElementById("fontFamily");
-const applyFontBtn = document.getElementById("applyFontBtn");
-const cancelFontBtn = document.getElementById("cancelFontBtn");
+const toolbar = document.getElementById('fontToolbar');
+let selectedText = null;
 const addImgBtn = document.getElementById("addImgBtn");
 const imgFile = document.getElementById("imgFile");
 
@@ -82,86 +79,144 @@ function updateButtons() {
   redoBtn.disabled = redoStack.length === 0;
 }
 
-// Show font popup when T button is clicked
-addTextBtn.addEventListener("click", () => {
-  fontPopup.style.display = "flex";
-});
-
-// Apply font settings and add text box
-applyFontBtn.addEventListener("click", () => {
+// Add new text box
+addTextBtn.addEventListener('click', () => {
   saveState();
 
-  const textBox = document.createElement("div");
+  const textBox = document.createElement('div');
+  textBox.classList.add('text-box');
   textBox.contentEditable = true;
-  textBox.textContent = "Double-click to edit text";
-  textBox.classList.add("text-box");
-
-  textBox.style.position = "absolute";
-  textBox.style.left = "50px";
-  textBox.style.top = "50px";
-  textBox.style.padding = "6px 10px";
-  textBox.style.background = "transparent";
-  textBox.style.border = "none";
-  textBox.style.cursor = "move";
-  textBox.style.fontSize = `${fontSizeInput.value}px`;
-  textBox.style.fontFamily = fontFamilySelect.value;
-
-  makeDraggable(textBox);
+  textBox.textContent = 'Double-click to edit text';
+  textBox.style.position = 'absolute';
+  textBox.style.top = '100px';
+  textBox.style.left = '100px';
+  textBox.style.fontFamily = 'Arial';
+  textBox.style.fontSize = '18px';
+  textBox.style.color = '#000';
+  textBox.style.padding = '6px 10px';
+  textBox.style.background = 'transparent';
+  textBox.style.border = 'none';
+  textBox.style.cursor = 'move';
   rightPage.appendChild(textBox);
+
+  enableDragging(textBox);
+  setupSelection(textBox);
   updateButtons();
-
-  fontPopup.style.display = "none";
 });
 
-// Cancel font popup
-cancelFontBtn.addEventListener("click", () => {
-  fontPopup.style.display = "none";
+// Handle selecting text boxes
+function setupSelection(textBox) {
+  textBox.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectTextBox(textBox, e);
+  });
+}
+
+// Select text box and show floating toolbar
+function selectTextBox(textBox, e) {
+  if (selectedText) selectedText.classList.remove('selected');
+  selectedText = textBox;
+  selectedText.classList.add('selected');
+
+  toolbar.style.display = 'flex';
+  toolbar.style.top = `${e.clientY - 60}px`;
+  toolbar.style.left = `${e.clientX}px`;
+
+  // Match toolbar values to current text
+  document.getElementById('fontSelect').value = (textBox.style.fontFamily || 'Arial').split(',')[0].trim();
+  document.getElementById('fontSizeSelect').value = textBox.style.fontSize || '18px';
+  document.getElementById('colorPicker').value = rgbToHex(textBox.style.color || '#000');
+}
+
+// Prevent toolbar from hiding when clicking inside it
+toolbar.addEventListener('click', (e) => {
+  e.stopPropagation();
 });
 
-// Drag functionality for text boxes
-function makeDraggable(el) {
-  let offsetX, offsetY, isDragging = false;
+document.addEventListener('click', () => {
+  if (selectedText) selectedText.classList.remove('selected');
+  toolbar.style.display = 'none';
+  selectedText = null;
+});
 
-  el.addEventListener("mousedown", (e) => {
+// Toolbar controls
+document.getElementById('fontSelect').addEventListener('change', (e) => {
+  if (selectedText) {
+    saveState();
+    selectedText.style.fontFamily = e.target.value;
+  }
+});
+
+document.getElementById('fontSizeSelect').addEventListener('change', (e) => {
+  if (selectedText) {
+    saveState();
+    selectedText.style.fontSize = e.target.value;
+  }
+});
+
+document.getElementById('colorPicker').addEventListener('input', (e) => {
+  if (selectedText) {
+    saveState();
+    selectedText.style.color = e.target.value;
+  }
+});
+
+document.getElementById('boldBtn').addEventListener('click', () => {
+  if (selectedText) {
+    saveState();
+    selectedText.style.fontWeight = selectedText.style.fontWeight === 'bold' ? 'normal' : 'bold';
+  }
+});
+
+document.getElementById('italicBtn').addEventListener('click', () => {
+  if (selectedText) {
+    saveState();
+    selectedText.style.fontStyle = selectedText.style.fontStyle === 'italic' ? 'normal' : 'italic';
+  }
+});
+
+document.getElementById('underlineBtn').addEventListener('click', () => {
+  if (selectedText) {
+    saveState();
+    selectedText.style.textDecoration = selectedText.style.textDecoration === 'underline' ? 'none' : 'underline';
+  }
+});
+
+// Dragging functionality
+function enableDragging(el) {
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  el.addEventListener('mousedown', (e) => {
     isDragging = true;
     offsetX = e.clientX - el.offsetLeft;
     offsetY = e.clientY - el.offsetTop;
-    el.style.zIndex = 1000;
+    e.preventDefault(); // prevent text selection
   });
 
-  window.addEventListener("mousemove", (e) => {
+  document.addEventListener('mousemove', (e) => {
     if (isDragging) {
       el.style.left = `${e.clientX - offsetX}px`;
       el.style.top = `${e.clientY - offsetY}px`;
     }
   });
 
-  window.addEventListener("mouseup", () => {
+  document.addEventListener('mouseup', () => {
     if (isDragging) {
-      isDragging = false;
       saveState();
-      el.style.zIndex = "";
+      isDragging = false;
     }
   });
 }
 
-// Update font for selected text boxes
-function updateSelectedTextBoxFont() {
-  const selectedTextBox = document.querySelector(".text-box:focus");
-  if (selectedTextBox) {
-    saveState();
-    selectedTextBox.style.fontSize = `${fontSizeInput.value}px`;
-    selectedTextBox.style.fontFamily = fontFamilySelect.value;
-  }
+// Convert rgb() to hex
+function rgbToHex(rgb) {
+  const match = rgb.match(/\d+/g);
+  if (!match) return '#000000';
+  return `#${match.map(x => (+x).toString(16).padStart(2, '0')).join('')}`;
 }
 
-// Connect buttons
-undoBtn.addEventListener("click", undo);
-redoBtn.addEventListener("click", redo);
 
-// Font controls event listeners
-fontSizeInput.addEventListener("input", updateSelectedTextBoxFont);
-fontFamilySelect.addEventListener("change", updateSelectedTextBoxFont);
 
 
 // Image Button

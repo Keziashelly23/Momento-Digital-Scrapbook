@@ -30,29 +30,35 @@
 
   </main>
 
-  <!-- Font Settings Popup -->
-  <div id="fontPopup" class="popup">
-    <div class="popup-content">
-      <h3>Font Settings</h3>
-      <div class="font-controls">
-        <label for="fontSize">Size:</label>
-        <input type="number" id="fontSize" value="16" min="8" max="72">
-        <label for="fontFamily">Font:</label>
-        <select id="fontFamily">
-          <option value="Segoe UI, sans-serif">Segoe UI</option>
-          <option value="Arial, sans-serif">Arial</option>
-          <option value="Times New Roman, serif">Times New Roman</option>
-          <option value="Courier New, monospace">Courier New</option>
-          <option value="Georgia, serif">Georgia</option>
-          <option value="Verdana, sans-serif">Verdana</option>
-          <option value="Helvetica, sans-serif">Helvetica</option>
-          <option value="Impact, sans-serif">Impact</option>
-          <option value="Comic Sans MS, cursive">Comic Sans</option>
-        </select>
-      </div>
-      <button id="applyFontBtn">Add Text</button>
-      <button id="cancelFontBtn">Cancel</button>
-    </div>
+  <!-- Floating Font Toolbar -->
+  <div id="fontToolbar" style="display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 5px; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+    <select id="fontSelect">
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Helvetica">Helvetica</option>
+      <option value="Impact">Impact</option>
+      <option value="Comic Sans MS">Comic Sans</option>
+    </select>
+    <select id="fontSizeSelect">
+      <option value="12px">12</option>
+      <option value="14px">14</option>
+      <option value="16px">16</option>
+      <option value="18px">18</option>
+      <option value="20px">20</option>
+      <option value="24px">24</option>
+      <option value="28px">28</option>
+      <option value="32px">32</option>
+      <option value="36px">36</option>
+      <option value="48px">48</option>
+      <option value="72px">72</option>
+    </select>
+    <input type="color" id="colorPicker" value="#000000">
+    <button id="boldBtn">B</button>
+    <button id="italicBtn">I</button>
+    <button id="underlineBtn">U</button>
   </div>
 
   <script src="canvas.js"></script>
