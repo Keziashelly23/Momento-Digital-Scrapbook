@@ -74,6 +74,25 @@ function updateButtons() {
   undoBtn.disabled = history.length === 0;
   redoBtn.disabled = redoStack.length === 0;
 }
+
+function reinitializeElements() {
+  // Reinitialize text boxes
+  document.querySelectorAll('.text-box').forEach(textBox => {
+    enableDragging(textBox);
+    setupSelection(textBox);
+    textBox.addEventListener('input', saveState);
+  });
+
+  // Reinitialize image frames
+  document.querySelectorAll('.image-frame').forEach(container => {
+    move(container);
+  });
+
+  // Reset selection
+  selectedText = null;
+  toolbar.style.display = 'none';
+}
+
 undoBtn.addEventListener('click', undo);
 redoBtn.addEventListener('click', redo);
 
