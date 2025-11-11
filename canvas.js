@@ -3,17 +3,16 @@ const addTextBtn = document.getElementById("addTextBtn");
 const undoBtn = document.getElementById("undoBtn");
 const redoBtn = document.getElementById("redoBtn");
 const toolbar = document.getElementById('fontToolbar');
-let selectedText = null;
 const addImgBtn = document.getElementById("addImgBtn");
 const imgFile = document.getElementById("imgFile");
 
+let selectedText = null;
 let history = [];
 let redoStack = [];
 
 // --- Mode detection ---
 const journalId = localStorage.getItem('activeJournalId');
 const mode = localStorage.getItem('journalMode'); // 'edit' or 'view'
-
 const journals = JSON.parse(localStorage.getItem('journals')) || [];
 let activeJournal = null;
 
@@ -28,7 +27,6 @@ if (mode === 'view') {
   enableEditing();
 }
 
-// Functions to enable/disable editing
 function enableEditing() {
   addTextBtn.style.display = 'inline-block';
   undoBtn.disabled = false;
@@ -39,47 +37,55 @@ function disableEditing() {
   addTextBtn.style.display = 'none';
   undoBtn.disabled = true;
   redoBtn.disabled = true;
-
-  // Make existing text boxes read-only
-  document.querySelectorAll(".text-box").forEach(box => {
-    box.contentEditable = false;
-  });
+  document.querySelectorAll(".text-box").forEach(box => box.contentEditable = false);
 }
 
-// Save current state
+// -------- Undo/Redo --------
 function saveState() {
-  history.push(rightPage.innerHTML);
+  const current = rightPage.innerHTML;
+  if (history.length && history[history.length - 1] === current) return; // avoid duplicates
+  history.push(current);
   redoStack = [];
   updateButtons();
 }
 
-// Undo function
 function undo() {
-  if (history.length > 0) {
-    redoStack.push(rightPage.innerHTML);
-    const prevState = history.pop();
-    rightPage.innerHTML = prevState;
-  }
+  if (!history.length) return;
+  redoStack.push(rightPage.innerHTML);
+  const prevState = history.pop();
+  rightPage.innerHTML = prevState;
+  reinitializeElements();
   updateButtons();
 }
 
-// Redo function
 function redo() {
-  if (redoStack.length > 0) {
-    history.push(rightPage.innerHTML);
-    const nextState = redoStack.pop();
-    rightPage.innerHTML = nextState;
-  }
+  if (!redoStack.length) return;
+  history.push(rightPage.innerHTML);
+  const nextState = redoStack.pop();
+  rightPage.innerHTML = nextState;
+  reinitializeElements();
   updateButtons();
 }
 
-// Enable/disable buttons based on history
 function updateButtons() {
   undoBtn.disabled = history.length === 0;
   redoBtn.disabled = redoStack.length === 0;
 }
+undoBtn.addEventListener('click', undo);
+redoBtn.addEventListener('click', redo);
 
-// Add new text box
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'z') {
+    e.preventDefault();
+    undo();
+  } else if (e.ctrlKey && (e.key === 'y' || (e.shiftKey && e.key === 'Z'))) {
+    e.preventDefault();
+    redo();
+  }
+});
+
+
+// -------- Text Boxes --------
 addTextBtn.addEventListener('click', () => {
   saveState();
 
@@ -87,32 +93,34 @@ addTextBtn.addEventListener('click', () => {
   textBox.classList.add('text-box');
   textBox.contentEditable = true;
   textBox.textContent = 'Double-click to edit text';
-  textBox.style.position = 'absolute';
-  textBox.style.top = '100px';
-  textBox.style.left = '100px';
-  textBox.style.fontFamily = 'Arial';
-  textBox.style.fontSize = '18px';
-  textBox.style.color = '#000';
-  textBox.style.padding = '6px 10px';
-  textBox.style.background = 'transparent';
-  textBox.style.border = 'none';
-  textBox.style.cursor = 'move';
+  Object.assign(textBox.style, {
+    position: 'absolute',
+    top: '100px',
+    left: '100px',
+    fontFamily: 'Arial',
+    fontSize: '18px',
+    color: '#000',
+    padding: '6px 10px',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'move'
+  });
   rightPage.appendChild(textBox);
 
   enableDragging(textBox);
   setupSelection(textBox);
+  textBox.addEventListener('input', saveState);
   updateButtons();
 });
 
-// Handle selecting text boxes
+// -------- Selection & Toolbar --------
 function setupSelection(textBox) {
-  textBox.addEventListener('click', (e) => {
+  textBox.addEventListener('click', e => {
     e.stopPropagation();
     selectTextBox(textBox, e);
   });
 }
 
-// Select text box and show floating toolbar
 function selectTextBox(textBox, e) {
   if (selectedText) selectedText.classList.remove('selected');
   selectedText = textBox;
@@ -122,59 +130,40 @@ function selectTextBox(textBox, e) {
   toolbar.style.top = `${e.clientY - 60}px`;
   toolbar.style.left = `${e.clientX}px`;
 
-  // Match toolbar values to current text
   document.getElementById('fontSelect').value = (textBox.style.fontFamily || 'Arial').split(',')[0].trim();
   document.getElementById('fontSizeSelect').value = textBox.style.fontSize || '18px';
   document.getElementById('colorPicker').value = rgbToHex(textBox.style.color || '#000');
 }
 
-// Prevent toolbar from hiding when clicking inside it
-toolbar.addEventListener('click', (e) => {
-  e.stopPropagation();
-});
-
+toolbar.addEventListener('click', e => e.stopPropagation());
 document.addEventListener('click', () => {
   if (selectedText) selectedText.classList.remove('selected');
   toolbar.style.display = 'none';
   selectedText = null;
 });
 
-// Toolbar controls
-document.getElementById('fontSelect').addEventListener('change', (e) => {
-  if (selectedText) {
-    saveState();
-    selectedText.style.fontFamily = e.target.value;
-  }
+// -------- Toolbar Controls --------
+document.getElementById('fontSelect').addEventListener('change', e => {
+  if (selectedText) { saveState(); selectedText.style.fontFamily = e.target.value; }
 });
-
-document.getElementById('fontSizeSelect').addEventListener('change', (e) => {
-  if (selectedText) {
-    saveState();
-    selectedText.style.fontSize = e.target.value;
-  }
+document.getElementById('fontSizeSelect').addEventListener('change', e => {
+  if (selectedText) { saveState(); selectedText.style.fontSize = e.target.value; }
 });
-
-document.getElementById('colorPicker').addEventListener('input', (e) => {
-  if (selectedText) {
-    saveState();
-    selectedText.style.color = e.target.value;
-  }
+document.getElementById('colorPicker').addEventListener('input', e => {
+  if (selectedText) { saveState(); selectedText.style.color = e.target.value; }
 });
-
 document.getElementById('boldBtn').addEventListener('click', () => {
   if (selectedText) {
     saveState();
     selectedText.style.fontWeight = selectedText.style.fontWeight === 'bold' ? 'normal' : 'bold';
   }
 });
-
 document.getElementById('italicBtn').addEventListener('click', () => {
   if (selectedText) {
     saveState();
     selectedText.style.fontStyle = selectedText.style.fontStyle === 'italic' ? 'normal' : 'italic';
   }
 });
-
 document.getElementById('underlineBtn').addEventListener('click', () => {
   if (selectedText) {
     saveState();
@@ -182,19 +171,21 @@ document.getElementById('underlineBtn').addEventListener('click', () => {
   }
 });
 
-// Dragging functionality
+// -------- Dragging for Text --------
 function enableDragging(el) {
-  let isDragging = false;
-  let offsetX, offsetY;
+  let isDragging = false, offsetX, offsetY;
 
-  el.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    offsetX = e.clientX - el.offsetLeft;
-    offsetY = e.clientY - el.offsetTop;
-    e.preventDefault(); // prevent text selection
+  el.addEventListener('mousedown', e => {
+    if (window.getSelection().toString() !== "") return;
+    if (e.target === el) {
+      isDragging = true;
+      offsetX = e.clientX - el.offsetLeft;
+      offsetY = e.clientY - el.offsetTop;
+      el.classList.add('active');
+    }
   });
 
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener('mousemove', e => {
     if (isDragging) {
       el.style.left = `${e.clientX - offsetX}px`;
       el.style.top = `${e.clientY - offsetY}px`;
@@ -202,22 +193,11 @@ function enableDragging(el) {
   });
 
   document.addEventListener('mouseup', () => {
-    if (isDragging) {
-      saveState();
-      isDragging = false;
-    }
+    if (isDragging) saveState();
+    isDragging = false;
+    el.classList.remove('active');
   });
 }
-
-// Convert rgb() to hex
-function rgbToHex(rgb) {
-  const match = rgb.match(/\d+/g);
-  if (!match) return '#000000';
-  return `#${match.map(x => (+x).toString(16).padStart(2, '0')).join('')}`;
-}
-
-
-
 
 // Image Button
 // directly opens file picker
@@ -371,5 +351,6 @@ document.addEventListener("paste", (e) =>{
   }
 })
 
-// Initial state save
+
+// Initial save
 saveState();
