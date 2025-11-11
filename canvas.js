@@ -1,3 +1,6 @@
+
+
+
 const rightPage = document.getElementById("rightPage");
 const addTextBtn = document.getElementById("addTextBtn");
 const undoBtn = document.getElementById("undoBtn");
@@ -350,6 +353,7 @@ document.addEventListener("paste", (e) =>{
     }
   }
 })
+
 
 
 // Initial save
