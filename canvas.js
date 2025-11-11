@@ -373,6 +373,58 @@ document.addEventListener("paste", (e) =>{
   }
 })
 
+//Choose Paper Button
+const choosePaperBtn = document.getElementById('choosePaperBtn');
+const paperPicker = document.getElementById('paperPicker');
+const paperOptions = document.querySelectorAll('.paper-option');
+const leftPageEl = document.getElementById('leftPage');
+const rightPageEl = document.getElementById('rightPage');
+
+let selectedPaper = null;
+
+// Toggle paper picker visibility
+choosePaperBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  paperPicker.classList.toggle('show');
+});
+
+// Hide picker when clicking elsewhere
+document.addEventListener('click', () => {
+  paperPicker.classList.remove('show');
+});
+
+// Hover preview
+paperOptions.forEach(option => {
+  option.addEventListener('mouseenter', () => {
+    const previewSrc = option.getAttribute('data-src');
+    leftPageEl.style.backgroundImage = `url(${previewSrc})`;
+    rightPageEl.style.backgroundImage = `url(${previewSrc})`;
+    leftPageEl.style.backgroundSize = 'cover';
+    rightPageEl.style.backgroundSize = 'cover';
+  });
+
+  option.addEventListener('mouseleave', () => {
+    // revert to selected paper or none
+    if (selectedPaper) {
+      leftPageEl.style.backgroundImage = `url(${selectedPaper})`;
+      rightPageEl.style.backgroundImage = `url(${selectedPaper})`;
+    } else {
+      leftPageEl.style.backgroundImage = 'none';
+      rightPageEl.style.backgroundImage = 'none';
+    }
+  });
+
+  // Click to select paper permanently
+  option.addEventListener('click', () => {
+    selectedPaper = option.getAttribute('data-src');
+    leftPageEl.style.backgroundImage = `url(${selectedPaper})`;
+    rightPageEl.style.backgroundImage = `url(${selectedPaper})`;
+    leftPageEl.style.backgroundSize = 'cover';
+    rightPageEl.style.backgroundSize = 'cover';
+    paperPicker.classList.remove('show');
+  });
+});
+
 
 
 // Initial save

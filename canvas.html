@@ -42,11 +42,23 @@
     <section class="journal-pages">
       <div class="page left-page" id="leftPage"></div>
       <div class="page right-page" id="rightPage"></div>
-      <img src="images/internalspirals.svg" alt="Spiral Binding" class="spiral-binding">
+      <img src="images/internal-spirals.png" alt="Spiral Binding" class="spiral-binding">
     </section>
 
     <button id="nextPageBtn" class="page-nav-btn">Next →</button>
     <button id="backBtn" class="page-nav-btn">← Back</button>
+
+    <!-- Choose Paper Button -->
+    <button id="choosePaperBtn" class="paper-type-btn">Paper</button>
+
+    <!-- Paper Picker (hidden by default) -->
+    <div id="paperPicker" class="paper-picker">
+      <div class="paper-option blank-paper" data-src="" title="Blank Paper"></div>
+      <img src="images/paper-lined.png" alt="Lined Paper" class="paper-option" data-src="images/paper-lined.png">
+      <img src="images/paper-grid.png" alt="Grid Paper" class="paper-option" data-src="images/paper-grid.png">
+      <img src="images/paper-dotted.png" alt="Dotted Paper" class="paper-option" data-src="images/paper-dotted.png">
+    </div>
+
 
   </main>
 
