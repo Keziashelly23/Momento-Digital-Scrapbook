@@ -19,9 +19,7 @@ h1 {
   background-color: #fff7fb;
   border: 2px solid #ffcce0;
   border-radius: 20px;
-  padding: 40px;
-  width: 400px;
-  margin: 80px auto;
+  padding: 10px;
   box-shadow: 0px 8px 20px rgba(255, 192, 203, 0.3);
 }
 
@@ -69,17 +67,17 @@ footer {
 
 @font-face {
   font-family: borel;
-  src: url(font/Borel/Borel-Regular.ttf);
+  src: url(fonts/Borel/Borel-Regular.ttf);
 }
 
 @font-face {
   font-family: momo;
-  src: url(font/Momo_Signature/MomoSignature-Regular.ttf);
+  src: url(fonts/Momo_Signature/MomoSignature-Regular.ttf);
 }
 
 @font-face {
   font-family: nanum;
-  src: url(font/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
+  src: url(fonts/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
 }
 
 
