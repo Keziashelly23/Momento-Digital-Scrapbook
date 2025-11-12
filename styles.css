@@ -1,3 +1,67 @@
+<<<<<<< Updated upstream
+=======
+/* ---------------- GLOBAL STYLES ---------------- */
+body {
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+  text-align: center;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+/* ---------------- Landing Page LAYOUT ---------------- */
+
+/* google button */
+.login-section {
+  border: 2px solid #ffcce0;
+  border-radius: 20px;
+  padding: 5%;
+  box-shadow: 0px 8px 20px rgba(255, 192, 203, 0.3);
+}
+
+.g_id_signin {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.g_id_signin:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 4px 15px rgba(255, 182, 193, 0.4);
+}
+
+footer {
+  text-align: center;
+  font-family: "nanum", sans-serif;
+  color: #777;
+  margin-top: 30px;
+  font-size: 14px;
+}
+.login-card {
+  background-color: #fff0f7;
+  border-radius: 16px;
+  padding: 25px;
+  border: 1.5px dashed #ff9ecf;
+  text-align: center;
+  position: relative;
+}
+
+.login-card::before {
+  content: "🎀";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+}
+
+>>>>>>> Stashed changes
 * {
   box-sizing: border-box;
 }
@@ -81,8 +145,17 @@ nav a{
 
 #left-content{
   margin: 40px;
-  padding: 40px;
-  background-color: white;
   border-radius: 40px;
   height: 88%;
+<<<<<<< Updated upstream
 }
+=======
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #fff7fb;
+
+}
+
+>>>>>>> Stashed changes
