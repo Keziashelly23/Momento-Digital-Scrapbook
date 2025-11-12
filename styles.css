@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 /* ---------------- GLOBAL STYLES ---------------- */
 body {
   font-family: sans-serif;
@@ -61,31 +59,25 @@ footer {
   font-size: 24px;
 }
 
->>>>>>> Stashed changes
 * {
   box-sizing: border-box;
 }
 
 @font-face {
   font-family: borel;
-  src: url(font/Borel/Borel-Regular.ttf);
+  src: url(fonts/Borel/Borel-Regular.ttf);
 }
 
 @font-face {
   font-family: momo;
-  src: url(font/Momo_Signature/MomoSignature-Regular.ttf);
+  src: url(fonts/Momo_Signature/MomoSignature-Regular.ttf);
 }
 
 @font-face {
   font-family: nanum;
-  src: url(font/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
+  src: url(fonts/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
 }
 
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-}
 
 nav a{
   background-color: #f4b0c6;
@@ -147,9 +139,6 @@ nav a{
   margin: 40px;
   border-radius: 40px;
   height: 88%;
-<<<<<<< Updated upstream
-}
-=======
   display: flex;
   justify-content: center;
   align-items: center;
@@ -157,5 +146,3 @@ nav a{
   background-color: #fff7fb;
 
 }
-
->>>>>>> Stashed changes
