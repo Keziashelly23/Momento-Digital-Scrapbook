@@ -1,7 +1,0 @@
-# Ignore environment files and logs
-.env
-firebase-debug.log
-
-# Ignore OS or editor files
-.DS_Store
-node_modules/
