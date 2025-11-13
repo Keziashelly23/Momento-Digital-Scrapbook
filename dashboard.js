@@ -56,7 +56,7 @@ function showDashboard() {
         </div>
         <div>
           <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z"
+            <path d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z"
               fill="${journal.coverColor || '#E6BDDC'}"
               stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
           </svg>
@@ -64,14 +64,36 @@ function showDashboard() {
         <img src="images/journalspirals.svg" class="spiral" alt="Spiral Binding">
         <img src="images/journalpages.svg" class="journal-pages" alt="Journal Pages">
       </div>
-      <h3>${journal.title}</h3>
+      <div class="journal-title">
+        <h3>${journal.title}</h3>
+        <button class="pencil-btn" title="Edit Title & Cover">✏️</button>
+      </div>
     `;
 
+    // Buttons
     const viewBtn = el.querySelector('.view-btn');
     const editBtn = el.querySelector('.edit-btn');
+    const pencilBtn = el.querySelector('.pencil-btn');
+    const journalDiv = el.querySelector('.journal');
 
-    viewBtn.addEventListener('click', () => viewJournal(journal.id));
-    editBtn.addEventListener('click', () => editJournal(journal.id));
+    // Prevent click events from bubbling
+    viewBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      viewJournal(journal.id);
+    });
+
+    editBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openJournalForEdit(journal.id);
+    });
+
+    pencilBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      editJournalMeta(journal.id);
+    });
+
+    // Click journal itself → open in edit mode
+    journalDiv.addEventListener('click', () => openJournalForEdit(journal.id));
 
     dashboard.appendChild(el);
   });
@@ -127,27 +149,23 @@ function createNewJournal() {
   };
 }
 
-// Open Edit Journal modal
-function editJournal(journalId) {
+// Edit journal metadata (title & cover only)
+function editJournalMeta(journalId) {
   const modal = document.getElementById('editJournalModal');
   const titleInput = document.getElementById('editJournalTitle');
   const colorInput = document.getElementById('editJournalColor');
   const saveBtn = document.getElementById('editJournalSave');
-  const skipBtn = document.getElementById('editJournalSkip');
   const cancelBtn = document.getElementById('editJournalCancel');
 
-  // Find the journal by ID
   const journal = journals.find(j => j.id === journalId);
   if (!journal) return;
 
-  // Pre-fill fields with current values
+  // Pre-fill inputs
   titleInput.value = journal.title;
   colorInput.value = journal.coverColor || '#E6BDDC';
 
-  // Show modal
   modal.style.display = 'flex';
 
-  // Save button
   saveBtn.onclick = () => {
     journal.title = titleInput.value.trim() || "Untitled Journal";
     journal.coverColor = colorInput.value;
@@ -156,29 +174,29 @@ function editJournal(journalId) {
     modal.style.display = 'none';
   };
 
-  // Skip button (go to canvas in edit mode)
-  skipBtn.onclick = () => {
-    localStorage.setItem('activeJournalId', journal.id);
-    localStorage.setItem('journalMode', 'edit');
-    window.location.href = 'canvas.html';
-  };
-
-  // Cancel button
   cancelBtn.onclick = () => {
     modal.style.display = 'none';
   };
 
-  // Close modal if clicking outside
   window.onclick = (e) => {
     if (e.target === modal) modal.style.display = 'none';
   };
 }
 
-function openJournal(id) {
-  localStorage.setItem('activeJournalId', id);
-  localStorage.setItem('journalMode', 'view'); // NEW: view-only mode
+// Open journal in edit mode (clicking journal or Edit button)
+function openJournalForEdit(journalId) {
+  localStorage.setItem('activeJournalId', journalId);
+  localStorage.setItem('journalMode', 'edit');
   window.location.href = 'canvas.html';
 }
+
+// Open journal in view mode (View button)
+function viewJournal(journalId) {
+  localStorage.setItem('activeJournalId', journalId);
+  localStorage.setItem('journalMode', 'view');
+  window.location.href = 'canvas.html';
+}
+
 
 // Initialize dashboard when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {

@@ -67,7 +67,32 @@ h1 {
 }
 
 #createJournalCancel {
-  background-color: #ccc;
+  background-color: none;
+}
+
+.journal-title {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.journal-title h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.pencil-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  color: #333;
 }
 
 /* ---------------- JOURNAL NOTEBOOK ---------------- */
@@ -199,7 +224,6 @@ button,
   margin-top: 10px;
 }
 
-button:hover,
 .create-btn:hover {
   background: #357ab8;
 }
