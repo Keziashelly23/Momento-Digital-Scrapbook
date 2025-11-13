@@ -300,7 +300,7 @@ function move(box){
       box.style.left = `${e.clientX - offsetX}px`;
       box.style.top = `${e.clientY - offsetY}px`;
 
-    // keeps image from squishing and updates the width anf height
+    // keeps image from squishing and updates the width and height
     } else if (isResizing) {
     const img = box.querySelector("img");
     const dx = e.clientX - startX;
