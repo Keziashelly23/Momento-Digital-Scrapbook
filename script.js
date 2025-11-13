@@ -1,222 +1,66 @@
 
-// Google Sign-In handler
-function handleCredentialResponse(response) {
-  try {
-    const jwt = response.credential;
-    const payload = JSON.parse(atob(jwt.split('.')[1])); // decode payload
-    
-    // Store user data in sessionStorage
-    sessionStorage.setItem('user', JSON.stringify({
-      id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-      picture: payload.picture
-    }));
+//Landing Page functions
+makeDraggable(document.querySelectorAll(".sticker"));
 
-    // Redirect to create.html after successful login
-    window.location.href = 'create.html';
-  } catch (err) {
-    console.error('Failed to decode credential:', err);
-    alert('Sign-in failed. Please try again.');
-  }
-}
+function makeDraggable(elements) {
+  elements.forEach(elmnt => {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const parent = elmnt.parentElement; // this is the #right-side div
 
-// Storage: prefer Firestore when a signed-in user exists, otherwise fall back to localStorage.
-async function loadJournals() {
-  const userStr = sessionStorage.getItem('user');
-  // If Firestore is available and a user is signed in, load from Firestore
-  if (userStr && window.db) {
-    try {
-      const user = JSON.parse(userStr);
-      console.log('Loading journals from Firebase for user:', user.id);
-      const ref = db.collection('users').doc(user.id);
-      const snap = await ref.get();
-      journals = (snap.exists && snap.data().journals) ? snap.data().journals : [];
-      console.log('Loaded from Firebase:', journals);
-      return journals;
-    } catch (err) {
-      console.error('Failed to load journals from Firestore, falling back to localStorage:', err);
+    elmnt.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+      e.preventDefault();
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
     }
-  }
 
-  // Fallback: localStorage
-  const data = localStorage.getItem('journals');
-  if (data) {
-    try {
-      journals = JSON.parse(data);
-    } catch (err) {
-      console.error("Error parsing journals from localStorage:", err);
-      journals = [];
+    function elementDrag(e) {
+      e.preventDefault();
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+
+      let newTop = elmnt.offsetTop - pos2;
+      let newLeft = elmnt.offsetLeft - pos1;
+
+      // parent boundaries
+      const parentRect = parent.getBoundingClientRect();
+      const elemRect = elmnt.getBoundingClientRect();
+
+      const minLeft = 0;
+      const maxLeft = parent.clientWidth - elemRect.width;
+      const minTop = 0;
+      const maxTop = parent.clientHeight - elemRect.height;
+
+      // keep inside parent
+      if (newLeft < minLeft) newLeft = minLeft;
+      if (newLeft > maxLeft) newLeft = maxLeft;
+      if (newTop < minTop) newTop = minTop;
+      if (newTop > maxTop) newTop = maxTop;
+
+      elmnt.style.top = newTop + "px";
+      elmnt.style.left = newLeft + "px";
     }
-  } else {
-    journals = [];
-  }
-  return journals;
-}
 
-async function saveJournals() {
-  const userStr = sessionStorage.getItem('user');
-  // If Firestore is available and a user is signed in, save to Firestore
-  if (userStr && window.db) {
-    try {
-      const user = JSON.parse(userStr);
-      const ref = db.collection('users').doc(user.id);
-      console.log('Saving journals to Firebase for user:', user.id, journals);
-      await ref.set({ journals: journals });
-      console.log('Successfully saved to Firebase!');
-      return;
-    } catch (err) {
-      console.error('Failed to save journals to Firestore, falling back to localStorage:', err);
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
     }
-  }
-
-
-}
-
-// ---------- Dashboard Logic ----------
-
-// Global journal array
-let journals = [];
-
-
-// Display the dashboard
-function showDashboard() {
-  const dashboard = document.getElementById('dashboard');
-  if (!dashboard) return;
-
-  dashboard.innerHTML = '';
-
-  if (journals.length === 0) {
-    dashboard.innerHTML = `<p class="no-journals">No journals yet. Create one to get started!</p>`;
-    return;
-  }
-
-  journals.forEach(journal => {
-    const el = document.createElement('div');
-    el.className = 'journal-cover';
-
-    el.innerHTML = `
-      <div class="journal">
-        <div>
-          <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z" fill="#E6BDDC" stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <img src="images/journalspirals.svg" class="spiral" alt="Spiral Binding">
-        <img src="images/journalpages.svg" class="journal-pages" alt="Journal Pages">
-      </div>
-      <h3>${journal.title}</h3>
-    `;
-
-    const button = document.createElement('button');
-    button.textContent = 'Open';
-    button.addEventListener('click', () => openJournal(journal.id));
-
-    el.appendChild(button);
-    dashboard.appendChild(el);
   });
 }
 
-// Create a new journal
-function createNewJournal() {
-  const title = prompt("Enter journal title:");
-  if (title === null) return;
-
-  const newJournal = {
-    id: Date.now(),
-    title: title.trim() || "Untitled Journal",
-    coverImage: "https://i.imgur.com/3R9Xn5L.png",
-    pages: [
-      { id: 1, content: "", background: "#fff" }
-    ]
-  };
-
-  journals.push(newJournal);
-  saveJournals();
-  showDashboard();
+function handleCredentialResponse(response) {
+  //Google sends the ID token in 'response .creditional'
+  const credential = response.creditional;
 }
 
-// Open a journal in the editor
-function openJournal(id) {
-  localStorage.setItem('activeJournalId', id);
-  window.location.href = 'editor.html';
-}
+function handleCredentialResponse(response) {
+  console.log("login successful", response);
+  localStorage.setItem("googleCredential", response.credential);
 
-// Initialize dashboard when DOM is ready
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadJournals();
-  showDashboard();
-
-  // Add event listener for create journal button
-  const createButton = document.getElementById('createJournalBtn');
-  if (createButton) {
-    createButton.addEventListener('click', createNewJournal);
-  }
-});
-
-// ---------- Editor Logic ----------
-let currentJournal = null;
-let currentPageIndex = 0;
-
-function loadEditor() {
-  const id = localStorage.getItem('activeJournalId');
-  currentJournal = journals.find(j => j.id == id);
-  if (!currentJournal) {
-    alert("Journal not found!");
-    window.location.href = 'index.html';
-    return;
-  }
-
-  document.getElementById('journal-title').textContent = currentJournal.title;
-  loadPage(currentPageIndex);
-}
-
-function loadPage(index) {
-  const pageDiv = document.getElementById('page');
-  if (!currentJournal.pages[index]) return;
-
-  const page = currentJournal.pages[index];
-  pageDiv.innerHTML = page.content;
-  pageDiv.style.background = page.background;
-
-  // Save page content on change
-  pageDiv.oninput = function() {
-    currentJournal.pages[index].content = pageDiv.innerHTML;
-    saveJournals();
-  };
-}
-
-function nextPage() {
-  if (currentPageIndex < currentJournal.pages.length - 1) {
-    currentPageIndex++;
-    loadPage(currentPageIndex);
-  } else {
-    alert("You're on the last page!");
-  }
-}
-
-function prevPage() {
-  if (currentPageIndex > 0) {
-    currentPageIndex--;
-    loadPage(currentPageIndex);
-  } else {
-    alert("You're on the first page!");
-  }
-}
-
-function addPage() {
-  const newPage = {
-    id: Date.now(),
-    content: "",
-    background: "#fff"
-  };
-  currentJournal.pages.push(newPage);
-  currentPageIndex = currentJournal.pages.length - 1;
-  saveJournals();
-  loadPage(currentPageIndex);
-}
-
-function goHome() {
-  saveJournals();
-  window.location.href = 'create.html';
+  window.location.href = "dashboard.html";
 }

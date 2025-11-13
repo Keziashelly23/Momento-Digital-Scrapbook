@@ -1,0 +1,239 @@
+/* Journal Canvas Layout */
+.journal-body {
+  margin: 0;
+  background-color: #fdfcfb;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #fff5ec;
+  border-right: 1px solid #ddd;
+  width: 8%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0;
+  gap: 18px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+b
+.tool-btn {
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.tool-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tool-btn:hover:not(:disabled) {
+  background: #ffe1f0;
+  border-color: #e13f88;
+}
+
+
+/* Journal Container */
+.journal-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 30px;
+}
+
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+
+/* Pages */
+.journal-pages {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+
+.page {
+  width: 47%;
+  height: 90%;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
+
+.journal-pages {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Spiral Binding */
+.spiral-binding {
+  position: absolute;
+  height: 85%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Page Layers */
+.left-page {
+  z-index: 1;
+  transform: translateX(5px);
+}
+
+.right-page {
+  z-index: 1;
+  transform: translateX(-5px);
+}
+
+.spiral-binding {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Footer */
+.journal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 0;
+  gap: 10px;
+}
+
+/* Popup Modal */
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  min-width: 300px;
+}
+
+.popup-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.font-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.font-controls label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.font-controls input,
+.font-controls select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+#applyFontBtn,
+#cancelFontBtn {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#applyFontBtn {
+  background-color: #e13f88;
+  color: white;
+}
+
+#applyFontBtn:hover {
+  background-color: #c92d6b;
+}
+
+#cancelFontBtn {
+  background-color: #ccc;
+  color: #333;
+}
+
+#cancelFontBtn:hover {
+  background-color: #aaa;
+}
+
+.image-frame {
+  position: absolute;
+  border: 1px solid transparent;
+  cursor: move;
+  user-select: none;
+}
+
+.image-frame.active {
+  border: 1px solid #333;
+}
+
+.resize, .rotate {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  font-size: 20px;
+  user-select: none;
+  cursor: pointer;
+}
+.resize {
+  bottom: -20px;
+  right: -10px;
+}
+
+.rotate {
+  top: -20px;
+}
+
+.image-frame .resize, .image-frame .rotate{
+  display: none;
+}
+.image-frame.active .resize, .image-frame.active .rotate {
+  display: block;
+}

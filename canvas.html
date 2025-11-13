@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrapbook Journal</title>
+  <link rel="stylesheet" href="canvas.css">
+</head>
+<body class="journal-body">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+      <button class="tool-btn" id="undoBtn" title="Undo">↶</button>
+      <button class="tool-btn" id="redoBtn" title="Redo">↷</button>
+      <button class="tool-btn" id="addTextBtn" title="Add Text">T</button>
+      <button class="tool-btn" id="addImgBtn" title="Add Image">I</button>
+      <button class="tool-btn" id="addStickersBtn" title="Add Stickers">I</button>
+        <!-- this handles getting the image -->
+        <input type="file" id="imgFile" accept="image/png, image.jpeg, image/jpg" style="display: none;">
+      <button class="tool-btn" id="drawBtn" title="Draw">D</button>
+  </aside>
+
+  <!-- Main Journal Area -->
+  <main class="journal-container">
+
+
+    <section class="journal-pages">
+      <div class="page left-page" id="leftPage"></div>
+      <div class="page right-page" id="rightPage"></div>
+      <img src="images/internalspirals.svg" alt="Spiral Binding" class="spiral-binding">
+    </section>
+
+  </main>
+
+  <!-- Floating Font Toolbar -->
+  <div id="fontToolbar" style="display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 5px; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+    <select id="fontSelect">
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Helvetica">Helvetica</option>
+      <option value="Impact">Impact</option>
+      <option value="Comic Sans MS">Comic Sans</option>
+    </select>
+    <select id="fontSizeSelect">
+      <option value="12px">12</option>
+      <option value="14px">14</option>
+      <option value="16px">16</option>
+      <option value="18px">18</option>
+      <option value="20px">20</option>
+      <option value="24px">24</option>
+      <option value="28px">28</option>
+      <option value="32px">32</option>
+      <option value="36px">36</option>
+      <option value="48px">48</option>
+      <option value="72px">72</option>
+    </select>
+    <input type="color" id="colorPicker" value="#000000">
+    <button id="boldBtn">B</button>
+    <button id="italicBtn">I</button>
+    <button id="underlineBtn">U</button>
+  </div>
+
+  <script src="canvas.js"></script>
+  <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js"></script>
+
+<!-- Your Firebase config -->
+<script type="module" src="firebase.js"></script>
+</body>
+</html>
