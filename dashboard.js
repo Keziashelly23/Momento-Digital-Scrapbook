@@ -100,6 +100,10 @@ function showDashboard() {
 }
 
 // Create a new journal
+
+//Event listener attached to create button
+document.querySelector(".create-circle-wrapper").addEventListener("click", createNewJournal);
+
 function createNewJournal() {
   const modal = document.getElementById('createJournalModal');
   const titleInput = document.getElementById('journalTitle');

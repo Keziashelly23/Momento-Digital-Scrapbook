@@ -9,10 +9,14 @@
 </head>
 <body onload="loadJournals(); showDashboard();">
 
-  <h1>📓 My Journals</h1>
+  <h1>My Journals</h1>
   <div id="dashboard" class="dashboard"></div>
 
-  <button onclick="createNewJournal()" class="create-btn">+ Create New Journal</button>
+  <div id="createJournal" class="create-circle-wrapper">
+    <img src="images/button-create.png" class="create-circle-btn" alt="Create Journal">
+    <p>Create</p>
+  </div>
+
 
   <!-- Create Journal Modal -->
   <div id="createJournalModal" class="modal">
