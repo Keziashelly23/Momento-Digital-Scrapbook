@@ -1,0 +1,1 @@
+document.getElementById("imageUpload").addEventListener("change", handleImageUpload);

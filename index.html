@@ -1,45 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Scrapbook</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Scrapbook</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>  
-    <div id="left-side">
-        <section id="left-content">
-            <header>
-            </header>
-            <main class="login">
-                <section class="login-section">
-                    <h2 style="font-family: momo; font-size: 70px; color: #e13f88; text-align: center; margin-top: 30px;margin-bottom: 0px;">M<span style="font-style: italic; margin-right: 6px;">♡</span>ment<span style="font-style: italic;">♡</span></h2>
-                    <img src="images/logo.png" style="width: 125px; text-align: center; display: block; margin: auto;">
-                    <p style="font-family: nanum; font-size: 25px; text-align: center; color: #717171;">Collect, customize, and celebrate your story!</p>
-                    <div id="g_id_onload"
-                        data-client_id="509638925342-953hod3rmrdhg7c3njk5afu28jre5fhf.apps.googleusercontent.com"
-                        data-context="signin"
-                        data-ux_mode="popup"
-                        data-callback="handleCredentialResponse"
-                        data-auto_prompt="false">
-                    </div>
-                    <div class="g_id_signin"
-                        data-type="standard"
-                        data-shape="rectangular"
-                        data-theme="outline"
-                        data-text="signin_with"
-                        data-size="large"
-                        data-logo_alignment="left">
-                    </div>
-                </section>
-            </main>
-            <footer>
-                <p>&copy;<span style="font-family: nanum; color: #717171;"> 2025 M♡ment♡. All rights reserved. </span></p>
-            </footer>
+  <div id="left-side">
+    <section id="left-content">
+      <main class="login">
+        <section class="login-section">
+          <h2 style="font-family: momo; font-size: 70px; color: #e13f88; text-align: center; margin-top: 30px;margin-bottom: 0px;">
+            M<span style="font-style: italic; margin-right: 6px;">♡</span>ment<span style="font-style: italic;">♡</span>
+          </h2>
+          <img src="images/logo.png" style="width: 125px; display: block; margin: auto;">
+          <p style="font-family: nanum; font-size: 25px; text-align: center; color: #717171;">
+            Collect, customize, and celebrate your story!
+          </p>
+          <div id="authControls">
+            <button id="googleSignIn">Sign in with Google</button>
+            <p id="userStatus">Not signed in</p>
+          </div>
         </section>
-    </div>
+      </main>
+    </section>
+  </div>
 
     <div id="right-side">
         <img id="journal-right" src="images/journal-ex.png">
@@ -72,6 +58,13 @@
 
         
     </div>
-    <script src="script.js"></script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <script src="firebase-config.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>

@@ -1,35 +1,87 @@
-// Load/save journals from localStorage
-function loadJournals() {
-  const data = localStorage.getItem('journals');
-  if (data) journals = JSON.parse(data);
-}
+// ------------------------
+// FIRESTORE VERSION
+// ------------------------
 
-function saveJournals() {
-  localStorage.setItem('journals', JSON.stringify(journals));
-}
-
-// ---------- Dashboard Logic ----------
-
-// Global journal array
 let journals = [];
+let user = null;
 
-// Load/save journals from localStorage
-function loadJournals() {
-  const data = localStorage.getItem('journals');
-  if (data) {
-    try {
-      journals = JSON.parse(data);
-    } catch (err) {
-      console.error("Error parsing journals from localStorage:", err);
-      journals = [];
-    }
-  } else {
-    journals = [];
+// Wait for login
+auth.onAuthStateChanged(u => {
+  if (!u) {
+    window.location.href = "index.html";
+    return;
   }
+
+  user = u;
+  document.getElementById('userGreeting').textContent = `Hello, ${u.displayName || u.email}!`;
+  loadJournals();
+});
+
+// Load journals from Firestore
+function loadJournals() {
+  db.collection("journals")
+    .where("owner", "==", user.uid)
+    .onSnapshot(snapshot => {
+      journals = [];
+      snapshot.forEach(doc => {
+        journals.push({ id: doc.id, ...doc.data() });
+      });
+
+      // Sort journals by createdAt ascending
+      journals.sort((a, b) => {
+        const aTime = a.createdAt ? a.createdAt.toMillis() : 0;
+        const bTime = b.createdAt ? b.createdAt.toMillis() : 0;
+        return aTime - bTime;
+      });
+
+      showDashboard();
+    });
 }
 
-function saveJournals() {
-  localStorage.setItem('journals', JSON.stringify(journals));
+// Save (update) a journal in Firestore
+function saveJournalToFirestore(id, data) {
+  return db.collection("journals").doc(id).update({
+    ...data,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+// Create a new journal
+function createNewJournal() {
+  const modal = document.getElementById('createJournalModal');
+  const titleInput = document.getElementById('journalTitle');
+  const colorInput = document.getElementById('journalColor');
+  const confirmBtn = document.getElementById('createJournalConfirm');
+  const cancelBtn = document.getElementById('createJournalCancel');
+
+  titleInput.value = '';
+  colorInput.value = '#E6BDDC';
+  modal.style.display = 'flex';
+
+  confirmBtn.onclick = async () => {
+    const title = titleInput.value.trim() || "Untitled Journal";
+    const coverColor = colorInput.value;
+
+    await db.collection("journals").add({
+      owner: user.uid,
+      title,
+      coverColor,
+      coverImage: "https://i.imgur.com/3R9Xn5L.png",
+      pages: [
+        { id: 1, content: "", background: "#fff" }
+      ],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    modal.style.display = 'none';
+  };
+
+  cancelBtn.onclick = () => modal.style.display = 'none';
+
+  window.onclick = (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  };
 }
 
 // Display the dashboard
@@ -53,82 +105,54 @@ function showDashboard() {
         <div class="journal-overlay">
           <button class="overlay-btn view-btn">View</button>
           <button class="overlay-btn edit-btn">Edit</button>
+          <button class="overlay-btn delete-btn">Delete</button>
         </div>
+
         <div>
-          <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="journalCoverFill" d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z"
+          <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none">
+            <path d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z"
               fill="${journal.coverColor || '#E6BDDC'}"
               stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
           </svg>
         </div>
+
         <img src="images/journalspirals.svg" class="spiral" alt="Spiral Binding">
         <img src="images/journalpages.svg" class="journal-pages" alt="Journal Pages">
       </div>
+
       <h3>${journal.title}</h3>
     `;
 
+    // Buttons
     const viewBtn = el.querySelector('.view-btn');
     const editBtn = el.querySelector('.edit-btn');
+    const deleteBtn = el.querySelector('.delete-btn');
 
-    viewBtn.addEventListener('click', () => viewJournal(journal.id));
-    editBtn.addEventListener('click', () => editJournal(journal.id));
+    // Event listeners
+    viewBtn.addEventListener('click', () => openJournal(journal.id));
+    editBtn.addEventListener('click', () => editJournal(journal));
+    deleteBtn.addEventListener('click', () => deleteJournal(journal.id)); // Firestore delete
 
     dashboard.appendChild(el);
   });
 }
 
-// Create a new journal
-function createNewJournal() {
-  const modal = document.getElementById('createJournalModal');
-  const titleInput = document.getElementById('journalTitle');
-  const colorInput = document.getElementById('journalColor');
-  const confirmBtn = document.getElementById('createJournalConfirm');
-  const cancelBtn = document.getElementById('createJournalCancel');
 
-  // Reset modal fields
-  titleInput.value = '';
-  colorInput.value = '#E6BDDC';
-
-  // Show modal
-  modal.style.display = 'flex';
-
-  // Confirm button
-  confirmBtn.onclick = () => {
-    const title = titleInput.value.trim() || "Untitled Journal";
-    const coverColor = colorInput.value;
-
-    const newJournal = {
-      id: Date.now(),
-      title,
-      coverColor,
-      coverImage: "https://i.imgur.com/3R9Xn5L.png",
-      pages: [
-        { id: 1, content: "", background: "#fff" }
-      ]
-    };
-
-    journals.push(newJournal);
-    saveJournals();
-    showDashboard();
-
-    modal.style.display = 'none';
-  };
-
-  // Cancel button
-  cancelBtn.onclick = () => {
-    modal.style.display = 'none';
-  };
-
-  // Close modal if user clicks outside it
-  window.onclick = (e) => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
-    }
-  };
+// Delete a journal
+function deleteJournal(id) {
+  if (!confirm("Delete this journal?")) return;
+  db.collection("journals").doc(id).delete();
 }
 
-// Open Edit Journal modal
-function editJournal(journalId) {
+// Open journal in canvas
+function openJournal(id) {
+  sessionStorage.setItem("activeJournalId", id);
+  sessionStorage.setItem("journalMode", "view");
+  window.location.href = "canvas.html";
+}
+
+// Edit journal modal
+function editJournal(journal) {
   const modal = document.getElementById('editJournalModal');
   const titleInput = document.getElementById('editJournalTitle');
   const colorInput = document.getElementById('editJournalColor');
@@ -136,52 +160,35 @@ function editJournal(journalId) {
   const skipBtn = document.getElementById('editJournalSkip');
   const cancelBtn = document.getElementById('editJournalCancel');
 
-  // Find the journal by ID
-  const journal = journals.find(j => j.id === journalId);
-  if (!journal) return;
-
-  // Pre-fill fields with current values
   titleInput.value = journal.title;
-  colorInput.value = journal.coverColor || '#E6BDDC';
-
-  // Show modal
+  colorInput.value = journal.coverColor;
   modal.style.display = 'flex';
 
-  // Save button
-  saveBtn.onclick = () => {
-    journal.title = titleInput.value.trim() || "Untitled Journal";
-    journal.coverColor = colorInput.value;
-    saveJournals();
-    showDashboard();
+  saveBtn.onclick = async () => {
+    await saveJournalToFirestore(journal.id, {
+      title: titleInput.value.trim() || "Untitled Journal",
+      coverColor: colorInput.value
+    });
+
     modal.style.display = 'none';
   };
 
-  // Skip button (go to canvas in edit mode)
   skipBtn.onclick = () => {
-    localStorage.setItem('activeJournalId', journal.id);
-    localStorage.setItem('journalMode', 'edit');
-    window.location.href = 'canvas.html';
+    sessionStorage.setItem("activeJournalId", journal.id);
+    sessionStorage.setItem("journalMode", "edit");
+    window.location.href = "canvas.html";
   };
 
-  // Cancel button
-  cancelBtn.onclick = () => {
-    modal.style.display = 'none';
-  };
+  cancelBtn.onclick = () => modal.style.display = 'none';
 
-  // Close modal if clicking outside
   window.onclick = (e) => {
     if (e.target === modal) modal.style.display = 'none';
   };
 }
 
-function openJournal(id) {
-  localStorage.setItem('activeJournalId', id);
-  localStorage.setItem('journalMode', 'view'); // NEW: view-only mode
-  window.location.href = 'canvas.html';
+// Sign out button (place this in HTML)
+function signOut() {
+  auth.signOut().then(() => {
+    window.location.href = "index.html";
+  });
 }
-
-// Initialize dashboard when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  loadJournals();
-  showDashboard();
-});

@@ -1,38 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Scrapbook Journal</title>
-  <link rel="stylesheet" href="canvas.css">
+  <link rel="stylesheet" href="canvas.css" />
 </head>
 <body class="journal-body">
   <!-- Sidebar -->
   <aside class="sidebar">
-      <button class="tool-btn" id="undoBtn" title="Undo">↶</button>
-      <button class="tool-btn" id="redoBtn" title="Redo">↷</button>
-      <button class="tool-btn" id="addTextBtn" title="Add Text">T</button>
-      <button class="tool-btn" id="addImgBtn" title="Add Image">I</button>
-      <button class="tool-btn" id="addStickersBtn" title="Add Stickers">I</button>
-        <!-- this handles getting the image -->
-        <input type="file" id="imgFile" accept="image/png, image.jpeg, image/jpg" style="display: none;">
-      <button class="tool-btn" id="drawBtn" title="Draw">D</button>
+    <button class="tool-btn" id="undoBtn" title="Undo">
+      <img src="images/undo.png" alt="Undo" />
+    </button>
+
+    <button class="tool-btn" id="redoBtn" title="Redo">
+      <img src="images/forward.png" alt="Redo" />
+    </button>
+
+    <button class="tool-btn" id="addTextBtn" title="Add Text">
+      <img src="images/file.png" alt="Add Text" />
+    </button>
+
+    <button class="tool-btn" id="addImgBtn" title="Add Image">
+      <img src="images/upload.png" alt="Add Image" />
+    </button>
+
+     <button class="tool-btn" id="exportBtn" title="Export">
+      <img src="images/share.png" alt="export" />
+    </button>
+
+    <!-- hidden file input used for uploading images -->
+    <input type="file" id="imgFile" accept="image/png, image/jpeg, image/jpg" style="display:none" />
+
+    <button class="tool-btn" id="addStickersBtn" title="Draw/Brush">
+      <img src="images/writing-pencil.png" alt="draw" />
+    </button>
   </aside>
 
   <!-- Main Journal Area -->
   <main class="journal-container">
-
-
     <section class="journal-pages">
       <div class="page left-page" id="leftPage"></div>
       <div class="page right-page" id="rightPage"></div>
-      <img src="images/internalspirals.svg" alt="Spiral Binding" class="spiral-binding">
+      <img src="images/internal-spirals.png" alt="Spiral Binding" class="spiral-binding" />
     </section>
 
+    <div class="page-controls">
+      <button id="backBtn" class="page-nav-btn">← Back</button>
+      <span id="pageIndicator">Page 1</span>
+      <button id="nextPageBtn" class="page-nav-btn">Next →</button>
+    </div>
+
+    <!-- Choose Paper Button -->
+    <button id="choosePaperBtn" class="paper-type-btn">Paper</button>
+
+    <!-- Paper Picker (hidden by default) -->
+    <div id="paperPicker" class="paper-picker">
+      <div class="paper-option blank-paper" data-src="" title="Blank Paper"></div>
+      <img src="images/paper-lined.png" alt="Lined Paper" class="paper-option" data-src="images/paper-lined.png" />
+      <img src="images/paper-grid.png" alt="Grid Paper" class="paper-option" data-src="images/paper-grid.png" />
+      <img src="images/paper-dotted.png" alt="Dotted Paper" class="paper-option" data-src="images/paper-dotted.png" />
+    </div>
   </main>
 
   <!-- Floating Font Toolbar -->
-  <div id="fontToolbar" style="display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 5px; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+  <div id="fontToolbar" style="display:none; position:absolute; background:white; border:1px solid #ccc; padding:5px; z-index:1000; box-shadow:0 2px 8px rgba(0,0,0,0.2);">
     <select id="fontSelect">
       <option value="Arial">Arial</option>
       <option value="Times New Roman">Times New Roman</option>
@@ -62,14 +94,7 @@
     <button id="underlineBtn">U</button>
   </div>
 
-  <script src="canvas.js"></script>
-  <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js"></script>
-
-<!-- Your Firebase config -->
-<script type="module" src="firebase.js"></script>
+  <!-- Module script -->
+  <script type="module" src="canvas.js"></script>
 </body>
 </html>
