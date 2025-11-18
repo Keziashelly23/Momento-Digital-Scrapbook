@@ -896,11 +896,11 @@ let colorPicker = new iro.ColorPicker("#colorWheel", {
 
 // Update page color
 colorPicker.on("color:change", color => {
-  leftPageEl.style.backgroundColor = color.hexString;
-  rightPageEl.style.backgroundColor = color.hexString;
+  leftPage.style.backgroundColor = color.hexString;
+  rightPage.style.backgroundColor = color.hexString;
 
-  leftPageEl.style.backgroundBlendMode = "multiply";
-  rightPageEl.style.backgroundBlendMode = "multiply";
+  leftPage.style.backgroundBlendMode = "multiply";
+  rightPage.style.backgroundBlendMode = "multiply";
 });
 
 // Close popup when clicking elsewhere
