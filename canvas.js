@@ -877,6 +877,38 @@ function buildExportHTML(pageNumber) {
   return docHtml;
 }
 
+const colorWheelBtn = document.getElementById("colorWheelBtn");
+const colorWheelPopup = document.getElementById("colorWheelPopup");
+
+// Show/hide popup
+colorWheelBtn.addEventListener("click", () => {
+  const isVisible = colorWheelPopup.style.display === "block";
+  colorWheelPopup.style.display = isVisible ? "none" : "block";
+});
+
+// Create color wheel
+let colorPicker = new iro.ColorPicker("#colorWheel", {
+  width: 160,
+  color: "#ffffff",
+  borderWidth: 1,
+  borderColor: "#ddd",
+});
+
+// Update page color
+colorPicker.on("color:change", color => {
+  leftPageEl.style.backgroundColor = color.hexString;
+  rightPageEl.style.backgroundColor = color.hexString;
+
+  leftPageEl.style.backgroundBlendMode = "multiply";
+  rightPageEl.style.backgroundBlendMode = "multiply";
+});
+
+// Close popup when clicking elsewhere
+document.addEventListener("click", (e) => {
+  if (!colorWheelPopup.contains(e.target) && e.target !== colorWheelBtn) {
+    colorWheelPopup.style.display = "none";
+  }
+});
 
 /* -------------------------
    Thumbnail generation (creates small PNG data URL and saves to Firestore)
