@@ -10,7 +10,7 @@
 
 /* Sidebar */
 .sidebar {
-  background-color: #fff5ec;
+  background-color: #ffe9f0;
   border-right: 1px solid #ddd;
   width: 8%;
   display: flex;
@@ -22,13 +22,15 @@
   z-index: 10;
 }
 
-b
+
 .tool-btn {
-  background: #f2f2f2;
+  background:   #f3f3f3;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 100%;
+  width: auto;
+  height: auto;
   padding: 8px 12px;
-  margin: 5px;
+  margin: 2px;
   cursor: pointer;
   font-size: 16px;
   transition: all 0.2s;
@@ -44,6 +46,9 @@ b
   border-color: #e13f88;
 }
 
+#exportBtn{
+  margin-top: auto;
+}
 
 /* Journal Container */
 .journal-container {
@@ -70,6 +75,7 @@ b
   border: none;
   color: white;
   padding: 10px 14px;
+  margin: 5px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
@@ -141,7 +147,7 @@ b
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: white;
+  background-color: #fff6f9;
   border: 1px solid #eee;
   border-radius: 8px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
@@ -171,6 +177,7 @@ b
   position: absolute;
   bottom: 3%;
   padding: 0.5% 1%;
+  margin: 5px;
   font-size: 0.9em;
   border: none;
   border-radius: 5px;
@@ -346,9 +353,10 @@ b
 /* button css */
 .tool-btn img {
   width: 24px;   /* adjust size as needed */
-  height: 24px;
+  height: auto;
   object-fit: contain;
   vertical-align: middle;
+  padding-left: 1.5%;
 }
 .image-frame.selected {
   outline: 2px dashed #4a90e2;
@@ -361,15 +369,16 @@ b
   left:90px; 
   width:250px; 
   height:300px; 
-  background: #fff7f7; 
-  border: 1px solid #ffb7d7; 
-  box-shadow: 0 6px 10px rgba(203, 161, 161, 0.5); 
+  background: #f9f9f9; 
+  border: 1px solid #dedede; 
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 6px 10px rgba(212, 203, 203, 0.5); 
   z-index: 100; 
 } 
   
 .sticker-tabs { 
   display: flex; 
-  background: #fce6d3; 
+  background: #e1e1e1; 
   padding: 5px; 
   justify-content: space-around; 
 } 
@@ -388,6 +397,7 @@ b
   flex-wrap: wrap;
   height: 240px; 
   padding: 5px; 
+  border-radius: 30px;
   overflow-y: auto;
   overflow-x: hidden;
 }
