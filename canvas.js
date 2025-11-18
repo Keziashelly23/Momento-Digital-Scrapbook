@@ -56,6 +56,13 @@ const pageIndicator = document.getElementById('pageIndicator');
 const saveBtn = document.getElementById('saveBtn'); // new explicit save button
 const exportBtn = document.getElementById('exportBtn'); // new export button
 const generateThumbBtn = document.getElementById('generateThumbBtn'); // optional button to force thumbnail
+const addStickers = document.getElementById("addStickersBtn");
+const stickerPopup = document.getElementById("stickerPopup");
+const stickerArea = document.getElementById("stickerArea");
+const stickerTab = document.getElementById("sticker-tab");
+
+
+
 
 /* -------------------------
    App state
@@ -130,6 +137,133 @@ function redo() {
 function updateButtons() {
   undoBtn.disabled = history.length === 0;
   redoBtn.disabled = redoStack.length === 0;
+}
+
+// STICKERS
+const stickers = {
+  food: [
+    "stickers/food/sticker-1.png","stickers/food/sticker-2.png",
+    "stickers/food/sticker-3.png","stickers/food/sticker-4.png",
+    "stickers/food/sticker-5.png","stickers/food/sticker-6.png",
+    "stickers/food/sticker-7.png","stickers/food/sticker-8.png",
+    "stickers/food/sticker-9.png","stickers/food/sticker-10.png",
+    "stickers/food/sticker-11.png","stickers/food/sticker-12.png",
+    "stickers/food/sticker-13.png","stickers/food/sticker-14.png",
+    "stickers/food/sticker-15.png","stickers/food/sticker-16.png",
+    "stickers/food/sticker-17.png"
+  ],
+  travel: [
+    "stickers/travel/sticker-1.png","stickers/travel/sticker-2.png",
+    "stickers/travel/sticker-3.png","stickers/travel/sticker-4.png",
+    "stickers/travel/sticker-5.png", "stickers/travel/sticker-6.jpg",
+    "stickers/travel/sticker-7.jpg","stickers/travel/sticker-8.jpg",
+    "stickers/travel/sticker-9.jpg", "stickers/travel/sticker-10.png"
+  ],
+  book: [
+    "stickers/book/sticker-1.png","stickers/book/sticker-2.png",
+    "stickers/book/sticker-3.png","stickers/book/sticker-4.png",
+    "stickers/book/sticker-5.png","stickers/book/sticker-6.png"
+  ],
+  other: [
+    "stickers/other/other-1.png", "stickers/other/other-2.png",
+    "stickers/other/other-3.png", "stickers/other/other-4.png",
+    "stickers/other/other-5.png", "stickers/other/other-6.png",
+    "stickers/other/other-7.png", "stickers/other/other-8.png",
+    "stickers/other/other-9.png", "stickers/other/other-10.png",
+    "stickers/other/other-11.png", "stickers/other/other-12.png",
+    "stickers/other/other-13.png", "stickers/other/other-14.png",
+    "stickers/other/other-15.png",
+    "stickers/other/tape-1.png", "stickers/other/tape-2.png",
+    "stickers/other/tape-3.png", "stickers/other/tape-4.png",
+    "stickers/other/tape-5.png", "stickers/other/tape-6.png"
+  ]
+};
+
+addStickers.addEventListener("click", () => {
+  if (stickerPopup.style.display === 'none' || stickerPopup.style.display === '') {
+    stickerPopup.style.display = 'block';
+    const firstTab = document.querySelector(".sticker-tab");
+    if (firstTab) {
+      loadStickers(firstTab.dataset.id);
+    }
+  } else {
+    stickerPopup.style.display = 'none';
+  }
+});
+
+document.querySelectorAll(".sticker-tab").forEach(stickerTab => {
+  stickerTab.addEventListener("click", () => {
+    const label = stickerTab.dataset.id;
+    loadStickers(label);
+  });
+});
+
+function loadStickers(label){
+  const area = document.getElementById("stickerArea");
+  area.innerHTML = "";
+
+  stickers[label].forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.width = "60px";
+    img.style.height = "60px";
+    img.style.margin = "5px";
+    img.style.cursor = "pointer";
+
+    img.addEventListener("click", () => {
+      placeSticker(src);
+      stickerPopup.style.display = "none";
+    });
+    area.appendChild(img);
+  });
+}
+
+function placeSticker(src){
+  saveState();
+
+  const container = document.createElement("div");
+  container.classList.add("image-frame");
+  container.setAttribute('data-id', generateId());
+  container.style.left = "100px";
+  container.style.top = "100px";
+
+  const sticker = document.createElement("img");
+  sticker.src = src;
+  sticker.style.width = "80px";
+  sticker.style.height = "auto";
+  sticker.style.display = "block";
+  sticker.style.pointerEvents = "none";
+
+  const resize = document.createElement("div");
+  resize.classList.add("resize");
+  resize.textContent = "➘";
+  resize.title = "Resize";
+
+  const rotate = document.createElement("div");
+  rotate.classList.add("rotate");
+  rotate.textContent = "↺";
+  rotate.title = "Rotate";
+
+  const deleteBtn = document.createElement("div");
+  deleteBtn.classList.add("delete");
+  deleteBtn.textContent = "✗";
+  deleteBtn.title = "Delete";
+  deleteBtn.addEventListener("click", () => {
+    container.remove();
+    saveState();
+  });
+
+  container.appendChild(sticker);
+  container.appendChild(resize);
+  container.appendChild(rotate);
+  container.appendChild(deleteBtn);
+  rightPage.appendChild(container);
+
+  sticker.ondragstart = () => false;
+
+  move(container);
+
+  saveState();
 }
 
 /* -------------------------
@@ -479,20 +613,17 @@ imgFile.addEventListener("change", (f) => {
 });
 
 // frame around the image with resize/rotate
-function createImageBox(src){
-  saveState();
+function createImageBox(src) {
   const container = document.createElement("div");
   container.classList.add("image-frame");
-
-  // assign unique id immediately
   container.setAttribute('data-id', generateId());
-  container.style.left = "80px";
-  container.style.top = "80px";
+  container.style.left = `${Math.random() * 300 + 50}px`;
+  container.style.top = `${Math.random() * 300 + 50}px`;
 
   const img = document.createElement("img");
   img.src = src;
   img.style.width = "200px";
-  img.style.height = 'auto';
+  img.style.height = "auto";
   img.style.display = "block";
   img.style.pointerEvents = "none";
 
@@ -504,14 +635,23 @@ function createImageBox(src){
   rotate.classList.add("rotate");
   rotate.textContent = "↺";
 
-  container.appendChild(img);
-  container.appendChild(resize);
-  container.appendChild(rotate);
+  const deleteBtn = document.createElement("div");
+  deleteBtn.classList.add("delete");
+  deleteBtn.textContent = "✗";
+  deleteBtn.title = "Delete";
+  deleteBtn.addEventListener("click", () => {
+    container.remove();
+    saveState();
+  });
+
+  container.append(img, resize, rotate, deleteBtn);
   rightPage.appendChild(container);
 
-  move(container);
-  saveState(); // push after creation
+  move(container); // drag/resize/rotate handler
+
+  saveState(); // save after creation
 }
+
 
 
 // dragging - resizing - rotating

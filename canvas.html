@@ -29,6 +29,10 @@
       <img src="images/upload.png" alt="Add Image" />
     </button>
 
+    <button class="tool-btn" id="addStickersBtn" title="Add Stickers">
+      <img src="images/addStickersBtn.png" alt="Add Stickers" />
+    </button>
+
      <button class="tool-btn" id="exportBtn" title="Export">
       <img src="images/share.png" alt="export" />
     </button>
@@ -94,6 +98,21 @@
     <button id="italicBtn">I</button>
     <button id="underlineBtn">U</button>
   </div>
+
+
+  <!-- stickers pop up --> 
+   <div id="stickerPopup" class="stickerPopup"> 
+    <div class="sticker-tabs"> 
+      <button class="sticker-tab" data-id="food">🍽️</button> 
+      <button class="sticker-tab" data-id="travel">✈️</button> 
+      <button class="sticker-tab" data-id="book">📖</button> 
+      <button class="sticker-tab" data-id="other">⭐</button> 
+    </div> 
+    <div class="stickerArea" id="stickerArea"> 
+
+    </div> 
+  </div>
+
 
   <!-- Module script -->
   <script type="module" src="canvas.js"></script>
