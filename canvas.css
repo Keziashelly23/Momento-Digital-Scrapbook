@@ -314,7 +314,7 @@ b
   border: 1px solid #333;
 }
 
-.resize, .rotate {
+.resize, .rotate, .delete{
   width: 20px;
   height: 20px;
   position: absolute;
@@ -328,13 +328,19 @@ b
 }
 
 .rotate {
-  top: -20px;
+  bottom: -25px;
+  left:50%;
+  transform: translateX(-50%);
+}
+.delete{
+  bottom: -20px;
+  left: 0;
 }
 
-.image-frame .resize, .image-frame .rotate{
+.image-frame .resize, .image-frame .rotate, .image-frame .delete{
   display: none;
 }
-.image-frame.active .resize, .image-frame.active .rotate {
+.image-frame.active .resize, .image-frame.active .rotate, .image-frame.active .delete {
   display: block;
 }
 /* button css */
@@ -346,4 +352,69 @@ b
 }
 .image-frame.selected {
   outline: 2px dashed #4a90e2;
+}
+
+.stickerPopup { 
+  position: absolute; 
+  display: none; 
+  top:210px; 
+  left:90px; 
+  width:250px; 
+  height:300px; 
+  background: #fff7f7; 
+  border: 1px solid #ffb7d7; 
+  box-shadow: 0 6px 10px rgba(203, 161, 161, 0.5); 
+  z-index: 100; 
+} 
+  
+.sticker-tabs { 
+  display: flex; 
+  background: #fce6d3; 
+  padding: 5px; 
+  justify-content: space-around; 
+} 
+
+.sticker-tab { 
+  background: none; 
+  border: none; 
+  font-size: 20px; 
+  cursor: pointer; 
+}
+.sticker-tab:hover{ 
+  box-shadow: 0 0px 10px rgba(255, 115, 215, 0.5); 
+} 
+.stickerArea {
+  display: flex;
+  flex-wrap: wrap;
+  height: 240px; 
+  padding: 5px; 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.stickerArea img {
+  width: 70px; 
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.image-frame img {
+  object-fit: contain;
+}
+.text-delete {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  font-size: 20px;
+  user-select: none;
+  cursor: pointer;
+  display: none;
+}
+.text-box.selected .text-delete {
+  display: block;
+}
+.text-box.selected {
+  border: 1px solid #333;
 }
