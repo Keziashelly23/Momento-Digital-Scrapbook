@@ -483,6 +483,9 @@ function createImageBox(src){
   saveState();
   const container = document.createElement("div");
   container.classList.add("image-frame");
+
+  // assign unique id immediately
+  container.setAttribute('data-id', generateId());
   container.style.left = "80px";
   container.style.top = "80px";
 
@@ -493,7 +496,6 @@ function createImageBox(src){
   img.style.display = "block";
   img.style.pointerEvents = "none";
 
-  // creates a resize and rotate symbol for image
   const resize = document.createElement("div");
   resize.classList.add("resize");
   resize.textContent = "➘";
@@ -502,14 +504,15 @@ function createImageBox(src){
   rotate.classList.add("rotate");
   rotate.textContent = "↺";
 
-
   container.appendChild(img);
   container.appendChild(resize);
   container.appendChild(rotate);
   rightPage.appendChild(container);
 
   move(container);
+  saveState(); // push after creation
 }
+
 
 // dragging - resizing - rotating
 function move(box){
