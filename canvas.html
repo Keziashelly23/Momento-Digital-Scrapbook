@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Scrapbook Journal</title>
   <link rel="stylesheet" href="canvas.css" />
+
+   <!-- Dropzone -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
+
 </head>
 <body class="journal-body">
   <!-- Sidebar -->
@@ -32,9 +36,11 @@
     <!-- hidden file input used for uploading images -->
     <input type="file" id="imgFile" accept="image/png, image/jpeg, image/jpg" style="display:none" />
 
-    <button class="tool-btn" id="addStickersBtn" title="Draw/Brush">
+    <button class="tool-btn" id="DrawBtn" title="Draw/Brush">
       <img src="images/writing-pencil.png" alt="draw" />
     </button>
+
+    <button onclick="deletePage()">🗑️ Delete Page</button>
   </aside>
 
   <!-- Main Journal Area -->

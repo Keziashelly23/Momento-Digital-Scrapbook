@@ -136,24 +136,29 @@ function updateButtons() {
    Reinitialize interactive elements (text/image)
    ------------------------- */
 function reinitializeElements() {
-  // Reinitialize text boxes
-  document.querySelectorAll('.text-box').forEach(textBox => {
-    enableDragging(textBox);
-    setupSelection(textBox);
-    textBox.removeEventListener('input', saveStateWrapper);
-    textBox.addEventListener('input', saveStateWrapper);
-  });
+  document.querySelectorAll('.image-frame').forEach(frame => {
 
-  // Reinitialize image frames
-  document.querySelectorAll('.image-frame').forEach(container => {
-    addImageControls(container);
-    move(container);
-  });
+    // remove old handles if they exist (avoid duplicates)
+    frame.querySelectorAll('.resize, .rotate').forEach(el => el.remove());
 
-  // Reset selection
-  selectedText = null;
-  if (toolbar) toolbar.style.display = 'none';
+    // create resize handle
+    const resize = document.createElement("div");
+    resize.classList.add("resize");
+    resize.textContent = "➘";
+
+    // create rotate handle
+    const rotate = document.createElement("div");
+    rotate.classList.add("rotate");
+    rotate.textContent = "↺";
+
+    frame.appendChild(resize);
+    frame.appendChild(rotate);
+
+    // rebind dragging/resizing/rotating
+    move(frame);
+  });
 }
+
 
 /* -------------------------
    debounce + autosave
@@ -449,53 +454,37 @@ function enableDragging(el) {
   });
 }
 
-/* -------------------------
-   Image handling
-   - uploads to Firebase Storage
-   - stores URL in page Firestore document in images[] metadata
-   ------------------------- */
-addImgBtn.addEventListener('click', () => imgFile.click());
-
-imgFile.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  console.log('File selected:', file.name, 'type:', file.type);
-  const upload = await uploadImageAndGetURL(file);
-  if (upload && upload.url) {
-    console.log('Upload successful, creating image box');
-    createImageBox(upload.url, upload.storagePath);
-    imgFile.value = '';
-    saveState();
-  } else {
-    console.log('Upload failed');
-  }
+// 
+// Image Button // 
+// directly opens file picker
+addImgBtn.addEventListener("click", () => {
+    imgFile.click();
 });
 
-async function uploadImageAndGetURL(file) {
-  try {
-    const path = `${currentUser.uid}/${journalId}/images/${Date.now()}_${file.name}`;
-    const ref = storageRef(storage, path);
-    const snapshot = await uploadBytes(ref, file);
-    const url = await getDownloadURL(snapshot.ref);
-    return { url, storagePath: path };
-  } catch (err) {
-    console.error('Image upload failed', err);
-    alert('Image upload failed');
-    return null;
-  }
-}
+// reads file and adds to page
+imgFile.addEventListener("change", (f) => {
+  const file = f.target.files[0];
+  if (!file) {
+    return;
+  };
 
-/* createImageBox uses a remote URL (Storage or other) and optional storagePath */
-function createImageBox(src, storagePath = '') {
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    createImageBox(event.target.result);
+  };
+  reader.readAsDataURL(file);
+
+  imgFile.value = "";
+
+});
+
+// frame around the image with resize/rotate
+function createImageBox(src){
   saveState();
   const container = document.createElement("div");
   container.classList.add("image-frame");
   container.style.left = "80px";
   container.style.top = "80px";
-  container.style.position = 'absolute';
-  container.style.zIndex = 6;
-  container.setAttribute('data-id', generateId());
-  if (storagePath) container.setAttribute('data-storagepath', storagePath);
 
   const img = document.createElement("img");
   img.src = src;
@@ -504,67 +493,7 @@ function createImageBox(src, storagePath = '') {
   img.style.display = "block";
   img.style.pointerEvents = "none";
 
-  const controls = document.createElement('div');
-  controls.classList.add('image-controls');
-
-  const resize = document.createElement("div");
-  resize.classList.add("resize");
-  resize.textContent = "➘";
-  resize.title = "Resize";
-
-  const rotate = document.createElement("div");
-  rotate.classList.add("rotate");
-  rotate.textContent = "↺";
-  rotate.title = "Rotate";
-
-  const del = document.createElement("button");
-  del.classList.add("img-delete");
-  del.textContent = "✕";
-  del.title = "Delete image";
-  del.addEventListener('click', (e) => {
-    e.stopPropagation();
-    // Optionally delete storage file: uncomment below if you'd like to remove from Storage too.
-    // const sp = container.getAttribute('data-storagepath');
-    // if (sp) deleteStorageFile(sp).catch(err=>console.warn("Storage delete failed",err));
-    container.remove();
-    saveState();
-  });
-
-  controls.appendChild(resize);
-  controls.appendChild(rotate);
-  controls.appendChild(del);
-
-  container.appendChild(img);
-  container.appendChild(controls);
-  rightPage.appendChild(container);
-
-  addImageControls(container);
-  move(container);
-}
-
-/* create image box from metadata (when loading from Firestore) */
-function createImageBoxFromMeta(meta) {
-  const container = document.createElement("div");
-  container.classList.add("image-frame");
-  container.style.left = (meta.left || 80) + "px";
-  container.style.top = (meta.top || 80) + "px";
-  container.style.position = 'absolute';
-  container.style.zIndex = 6;
-  container.setAttribute('data-id', meta.id || generateId());
-  if (meta.storagePath) container.setAttribute('data-storagepath', meta.storagePath);
-
-  const img = document.createElement("img");
-  img.src = meta.url;
-  img.style.width = (meta.width ? meta.width + "px" : "200px");
-  img.style.height = (meta.height ? meta.height + "px" : 'auto');
-  img.style.display = "block";
-  img.style.pointerEvents = "none";
-
-  if (meta.rotation) container.style.transform = `rotate(${meta.rotation}deg)`;
-
-  const controls = document.createElement('div');
-  controls.classList.add('image-controls');
-
+  // creates a resize and rotate symbol for image
   const resize = document.createElement("div");
   resize.classList.add("resize");
   resize.textContent = "➘";
@@ -573,60 +502,16 @@ function createImageBoxFromMeta(meta) {
   rotate.classList.add("rotate");
   rotate.textContent = "↺";
 
-  const del = document.createElement("button");
-  del.classList.add("img-delete");
-  del.textContent = "✕";
-  del.addEventListener('click', (e) => {
-    e.stopPropagation();
-    container.remove();
-    saveState();
-  });
-
-  controls.appendChild(resize);
-  controls.appendChild(rotate);
-  controls.appendChild(del);
 
   container.appendChild(img);
-  container.appendChild(controls);
+  container.appendChild(resize);
+  container.appendChild(rotate);
   rightPage.appendChild(container);
 
-  addImageControls(container);
   move(container);
 }
 
-/* add basic accessible controls classname attach (for reinitializeElements) */
-function addImageControls(container) {
-  // ensure the delete button exists (if not created by HTML)
-  if (!container.querySelector('.img-delete')) {
-    const del = document.createElement("button");
-    del.classList.add("img-delete");
-    del.textContent = "✕";
-    del.addEventListener('click', (e) => {
-      e.stopPropagation();
-      container.remove();
-      saveState();
-    });
-    const controls = container.querySelector('.image-controls') || (() => {
-      const c = document.createElement('div'); c.classList.add('image-controls'); container.appendChild(c); return c;
-    })();
-    controls.appendChild(del);
-  }
-}
-
-/* optional: delete storage file (use with care) */
-async function deleteStorageFile(path) {
-  try {
-    const ref = storageRef(storage, path);
-    await deleteObject(ref);
-  } catch (err) {
-    console.warn("Storage delete error", err);
-  }
-}
-
-/* -------------------------
-   dragging/resizing/rotating for image frames
-   (unchanged logic but slightly more robust)
-   ------------------------- */
+// dragging - resizing - rotating
 function move(box){
   let isDragging = false, offsetX, offsetY;
   let isResizing = false, startWidth, startHeight, startX, startY;
@@ -635,26 +520,39 @@ function move(box){
   const resize = box.querySelector(".resize");
   const rotate = box.querySelector(".rotate");
 
+
+  //highlights box and on click starts dragging
   box.addEventListener("mousedown", (e) => {
-    if (e.target === resize || e.target === rotate || e.target.closest('.image-controls')) return;
+    if (e.target === resize || e.target === rotate) return;
     isDragging = true;
     offsetX = e.clientX - box.offsetLeft;
     offsetY = e.clientY - box.offsetTop;
     box.classList.add("active");
   });
 
+
+
+
+  // box moves with mouse
   window.addEventListener("mousemove", (e) => {
     if (isDragging) {
       box.style.left = `${e.clientX - offsetX}px`;
       box.style.top = `${e.clientY - offsetY}px`;
+
+    // keeps image from squishing and updates the width anf height
     } else if (isResizing) {
-      const img = box.querySelector("img");
-      const dx = e.clientX - startX;
-      const newWidth = Math.max(50, startWidth + dx);
-      const aspectRatio = startWidth / startHeight;
-      const newHeight = Math.max(50, Math.round(newWidth / aspectRatio));
-      img.style.width = `${newWidth}px`;
-      img.style.height = `${newHeight}px`;
+    const img = box.querySelector("img");
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const scale = Math.max(dx, dy) / 100;
+    const newWidth = Math.max(50, startWidth + dx);
+    const aspectRatio = startWidth / startHeight;
+    const newHeight = newWidth / aspectRatio;
+
+    img.style.width = `${newWidth}px`;
+    img.style.height = `${newHeight}px`;
+
+    // rotate
     } else if (isRotating) {
       const dx = e.clientX - centerX;
       const dy = e.clientY - centerY;
@@ -664,6 +562,7 @@ function move(box){
     }
   });
 
+  //stop everything when un clicking and saves
   window.addEventListener("mouseup", () => {
     if (isDragging || isResizing || isRotating) {
       saveState();
@@ -671,7 +570,7 @@ function move(box){
     isDragging = isResizing = isRotating = false;
   });
 
-  if (resize) resize.addEventListener("mousedown", (e) => {
+  resize.addEventListener("mousedown", (e) => {
     e.stopPropagation();
     isResizing = true;
     startWidth = box.querySelector("img").offsetWidth;
@@ -680,7 +579,7 @@ function move(box){
     startY = e.clientY;
   });
 
-  if (rotate) rotate.addEventListener("mousedown", (e) => {
+  rotate.addEventListener("mousedown", (e) => {
     e.stopPropagation();
     isRotating = true;
     const rect = box.getBoundingClientRect();
@@ -691,61 +590,29 @@ function move(box){
     startRotation = transform ? parseFloat(transform[1]) : 0;
   });
 
-  // clicking off box removes highlight
+  //clicking off box removes it
   document.addEventListener("click", (e) => {
     if (!box.contains(e.target)) box.classList.remove("active");
   });
 }
 
-/* -------------------------
-   Paste images (clipboard)
-   ------------------------- */
-document.addEventListener("paste", async (e) => {
-  const items = e.clipboardData?.items || [];
-  for (let i = 0; i < items.length; i++){
+//for pc/laptop, ctrl v pastes images
+document.addEventListener("paste", (e) =>{
+  const items = e.clipboardData.items;
+  for (let i = 0; i <items.length; i++){
     if (items[i].type.indexOf("image") !== -1){
       const file = items[i].getAsFile();
-      if (!file) continue;
-      console.log('Pasting image:', file.name);
-      const upload = await uploadImageAndGetURL(file);
-      if (upload && upload.url) {
-        createImageBox(upload.url, upload.storagePath);
-        saveState();
-      }
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        createImageBox(event.target.result);
+      };
+      reader.readAsDataURL(file);
       e.preventDefault();
     }
   }
-});
+})
 
-/* -------------------------
-   Drag and drop images
-   ------------------------- */
-rightPage.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  rightPage.classList.add('drag-over');
-});
 
-rightPage.addEventListener('dragleave', (e) => {
-  e.preventDefault();
-  rightPage.classList.remove('drag-over');
-});
-
-rightPage.addEventListener('drop', async (e) => {
-  e.preventDefault();
-  rightPage.classList.remove('drag-over');
-  const files = e.dataTransfer.files;
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.type.startsWith('image/')) {
-      console.log('Dropping file:', file.name);
-      const upload = await uploadImageAndGetURL(file);
-      if (upload && upload.url) {
-        createImageBox(upload.url, upload.storagePath);
-        saveState();
-      }
-    }
-  }
-});
 
 /* -------------------------
    Paper picker behavior + save paper
@@ -866,6 +733,7 @@ function buildExportHTML(pageNumber) {
 `;
   return docHtml;
 }
+
 
 /* -------------------------
    Thumbnail generation (creates small PNG data URL and saves to Firestore)

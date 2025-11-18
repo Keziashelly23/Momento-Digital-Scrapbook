@@ -314,7 +314,7 @@ b
   border: 1px solid #333;
 }
 
-.resize, .rotate {
+.resize, .rotate{
   width: 20px;
   height: 20px;
   position: absolute;
@@ -330,6 +330,7 @@ b
 .rotate {
   top: -20px;
 }
+
 
 .image-frame .resize, .image-frame .rotate{
   display: none;
@@ -347,3 +348,22 @@ b
 .image-frame.selected {
   outline: 2px dashed #4a90e2;
 }
+
+#controls {
+  margin-bottom: 10px;
+}
+
+.page-area {
+  width: 800px;
+  height: 600px;
+  border: 1px solid #ccc;
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+}
+
+.page-area img,
+.page-area .text-box {
+  cursor: move;
+}
+
