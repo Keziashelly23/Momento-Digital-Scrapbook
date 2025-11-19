@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scrapbook Journal</title>
   <link rel="stylesheet" href="canvas.css">
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro/dist/iro.min.js"></script>
 </head>
 <body class="journal-body">
   <!-- Sidebar -->
@@ -47,6 +48,15 @@
 
     <button id="nextPageBtn" class="page-nav-btn">Next →</button>
     <button id="backBtn" class="page-nav-btn">← Back</button>
+
+    <!-- Color Wheel Button -->
+    <button id="colorWheelBtn" class="color-wheel-btn">🎨</button>
+
+    <!-- Custom Color Wheel Popup -->
+    <div id="colorWheelPopup" class="color-wheel-popup">
+      <div id="colorWheel"></div>
+    </div>
+
 
     <!-- Choose Paper Button -->
     <button id="choosePaperBtn" class="paper-type-btn">Paper</button>
