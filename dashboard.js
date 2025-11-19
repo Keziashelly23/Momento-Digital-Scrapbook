@@ -46,6 +46,8 @@ function saveJournalToFirestore(id, data) {
   });
 }
 
+document.querySelector(".create-circle-wrapper").addEventListener("click", createNewJournal);
+
 // Create a new journal
 function createNewJournal() {
   const modal = document.getElementById('createJournalModal');
@@ -109,7 +111,7 @@ function showDashboard() {
         </div>
 
         <div>
-          <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none">
+          <svg class="cover" width="630" height="831" viewBox="0 0 630 831" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1.51 1.5V829.44H586.104C609.119 829.44 627.574 810.9 627.574 787.885V43.055C627.574 20.04 609.119 1.5 586.104 1.5H1.5H1.51Z"
               fill="${journal.coverColor || '#E6BDDC'}"
               stroke="#030000" stroke-width="3" stroke-linejoin="round"/>
@@ -120,17 +122,22 @@ function showDashboard() {
         <img src="images/journalpages.svg" class="journal-pages" alt="Journal Pages">
       </div>
 
-      <h3>${journal.title}</h3>
+      <div class="journal-title">
+        <h3>${journal.title}</h3>
+        <button class="pencil-btn" title="Edit Title & Cover">✏️</button>
+      </div>
     `;
 
     // Buttons
     const viewBtn = el.querySelector('.view-btn');
     const editBtn = el.querySelector('.edit-btn');
+    const pencilBtn = el.querySelector('.pencil-btn');
     const deleteBtn = el.querySelector('.delete-btn');
 
     // Event listeners
     viewBtn.addEventListener('click', () => openJournal(journal.id));
     editBtn.addEventListener('click', () => editJournal(journal));
+    pencilBtn.addEventListener('click', () => editJournal(journal));
     deleteBtn.addEventListener('click', () => deleteJournal(journal.id)); // Firestore delete
 
     dashboard.appendChild(el);
