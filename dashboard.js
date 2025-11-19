@@ -105,8 +105,7 @@ function showDashboard() {
     el.innerHTML = `
       <div class="journal">
         <div class="journal-overlay">
-          <button class="overlay-btn view-btn" style="font-family: 'nanum';">View</button>
-          <button class="overlay-btn edit-btn" style="font-family: 'nanum';">Edit</button>
+          <button class="overlay-btn view-btn" style="font-family: 'nanum';">Open</button>
           <button class="overlay-btn delete-btn" style="font-family: 'nanum';">Delete</button>
         </div>
 
@@ -130,13 +129,11 @@ function showDashboard() {
 
     // Buttons
     const viewBtn = el.querySelector('.view-btn');
-    const editBtn = el.querySelector('.edit-btn');
     const pencilBtn = el.querySelector('.pencil-btn');
     const deleteBtn = el.querySelector('.delete-btn');
 
     // Event listeners
     viewBtn.addEventListener('click', () => openJournal(journal.id));
-    editBtn.addEventListener('click', () => editJournal(journal));
     pencilBtn.addEventListener('click', () => editJournal(journal));
     deleteBtn.addEventListener('click', () => deleteJournal(journal.id)); // Firestore delete
 
