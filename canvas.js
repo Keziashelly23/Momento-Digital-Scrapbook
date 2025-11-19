@@ -150,19 +150,38 @@ const stickers = {
     "stickers/food/sticker-11.png","stickers/food/sticker-12.png",
     "stickers/food/sticker-13.png","stickers/food/sticker-14.png",
     "stickers/food/sticker-15.png","stickers/food/sticker-16.png",
-    "stickers/food/sticker-17.png"
+    "stickers/food/sticker-17.png","stickers/food/sticker-18.png",
+    "stickers/food/sticker-19.png","stickers/food/sticker-20.png",
+    "stickers/food/sticker-21.png","stickers/food/sticker-22.png",
+    "stickers/food/sticker-23.png","stickers/food/sticker-24.png",
+    "stickers/food/sticker-25.png","stickers/food/sticker-26.png",
+    "stickers/food/sticker-27.png","stickers/food/sticker-28.png",
+    "stickers/food/sticker-29.png","stickers/food/sticker-30.png",
+    "stickers/food/sticker-31.png","stickers/food/sticker-32.png",
+    "stickers/food/sticker-33.png","stickers/food/sticker-34.png",
+    "stickers/food/sticker-35.png"
   ],
   travel: [
     "stickers/travel/sticker-1.png","stickers/travel/sticker-2.png",
     "stickers/travel/sticker-3.png","stickers/travel/sticker-4.png",
     "stickers/travel/sticker-5.png", "stickers/travel/sticker-6.jpg",
     "stickers/travel/sticker-7.jpg","stickers/travel/sticker-8.jpg",
-    "stickers/travel/sticker-9.jpg", "stickers/travel/sticker-10.png"
+    "stickers/travel/sticker-9.jpg", "stickers/travel/sticker-10.png",
+    "stickers/travel/sticker-11.png", "stickers/travel/sticker-12.png",
+    "stickers/travel/sticker-13.png","stickers/travel/sticker-14.png",
+    "stickers/travel/sticker-15.png","stickers/travel/sticker-16.png",
+    "stickers/travel/sticker-17.png","stickers/travel/sticker-18.png",
+    "stickers/travel/sticker-19.png"
   ],
   book: [
     "stickers/book/sticker-1.png","stickers/book/sticker-2.png",
     "stickers/book/sticker-3.png","stickers/book/sticker-4.png",
-    "stickers/book/sticker-5.png","stickers/book/sticker-6.png"
+    "stickers/book/sticker-5.png","stickers/book/sticker-6.png",
+    "stickers/book/sticker-7.png","stickers/book/sticker-8.png",
+    "stickers/book/sticker-9.png","stickers/book/sticker-10.png",
+    "stickers/book/sticker-11.png","stickers/book/sticker-12.png",
+    "stickers/book/sticker-13.png","stickers/book/sticker-14.png",
+    "stickers/book/sticker-15.png"
   ],
   other: [
     "stickers/other/other-1.png", "stickers/other/other-2.png",
@@ -172,13 +191,29 @@ const stickers = {
     "stickers/other/other-9.png", "stickers/other/other-10.png",
     "stickers/other/other-11.png", "stickers/other/other-12.png",
     "stickers/other/other-13.png", "stickers/other/other-14.png",
-    "stickers/other/other-15.png",
+    "stickers/other/other-15.png", "stickers/other/other-16.png",
+    "stickers/other/other-17.png", "stickers/other/other-18.png",
+    "stickers/other/other-19.png",
     "stickers/other/tape-1.png", "stickers/other/tape-2.png",
     "stickers/other/tape-3.png", "stickers/other/tape-4.png",
-    "stickers/other/tape-5.png", "stickers/other/tape-6.png"
+    "stickers/other/tape-5.png", "stickers/other/tape-6.png",
+    "stickers/other/tape-7.png", "stickers/other/tape-8.png",
+    "stickers/other/tape-9.png", "stickers/other/tape-10.png"
   ],
   letters: [
-    "stickers/other/other-1.png"
+    "stickers/letters/a-1.png", "stickers/letters/b-1.png",
+    "stickers/letters/c-1.png", "stickers/letters/d-1.png",
+    "stickers/letters/e-1.png", "stickers/letters/f-1.png",
+    "stickers/letters/g-1.png", "stickers/letters/h-1.png",
+    "stickers/letters/i-1.png", "stickers/letters/j-1.png",
+    "stickers/letters/k-1.png", "stickers/letters/l-1.png",
+    "stickers/letters/m-1.png", "stickers/letters/n-1.png",
+    "stickers/letters/o-1.png", "stickers/letters/p-1.png",
+    "stickers/letters/q-1.png", "stickers/letters/r-1.png",
+    "stickers/letters/s-1.png", "stickers/letters/t-1.png",
+    "stickers/letters/u-1.png", "stickers/letters/v-1.png",
+    "stickers/letters/w-1.png", "stickers/letters/x-1.png",
+    "stickers/letters/y-1.png", "stickers/letters/z-1.png"
   ]
 };
 

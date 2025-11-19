@@ -1,16 +1,62 @@
+@font-face {
+  font-family: borel;
+  src: url(fonts/Borel/Borel-Regular.ttf);
+}
+
+@font-face {
+  font-family: momo;
+  src: url(fonts/Momo_Signature/MomoSignature-Regular.ttf);
+}
+
+@font-face {
+  font-family: nanum;
+  src: url(fonts/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
+}
+
 /* ---------------- GLOBAL STYLES ---------------- */
 body {
-  font-family: borel;
+  font-family: 'nanum';
   background-color: #fff7fb;
   text-align: center;
   margin: 0;
-  padding: 20px;
-  color: #494949;
+  padding: 0px;
+  color: #757575;
 }
 
 h1 {
-  margin-bottom: 20px;
-  font-family: borel;
+  margin: 0;
+  font-family: 'momo';
+  padding-left: 10px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+  border-bottom: 2px solid #f3bbd1;
+  box-shadow: #dfa9c1 0px 4px 12px;
+  background-color: #ffcce0;
+  color: #e13f88;
+}
+
+#greeting{
+  display: flex;
+  padding-left: 5%;
+  margin: 2%;
+}
+
+#signOutBtn{
+  width: 60px;
+  height: 60px;
+  background-image: url(images/logout.png);    
+  background-size: cover;
+  transition: background-image 0.3s ease; 
+}
+
+#signOutBtn:hover {
+  background-image: url(images/logoutHover.png); 
 }
 
 /* ---------------- DASHBOARD LAYOUT ---------------- */

@@ -13,7 +13,7 @@ auth.onAuthStateChanged(u => {
   }
 
   user = u;
-  document.getElementById('userGreeting').textContent = `Hello, ${u.displayName || u.email}!`;
+  document.getElementById('userGreeting').textContent = `${u.displayName || u.email}'s Journals! ⋆𖦹⋆ˎˊ˗`;
   loadJournals();
 });
 
@@ -105,9 +105,9 @@ function showDashboard() {
     el.innerHTML = `
       <div class="journal">
         <div class="journal-overlay">
-          <button class="overlay-btn view-btn">View</button>
-          <button class="overlay-btn edit-btn">Edit</button>
-          <button class="overlay-btn delete-btn">Delete</button>
+          <button class="overlay-btn view-btn" style="font-family: 'nanum';">View</button>
+          <button class="overlay-btn edit-btn" style="font-family: 'nanum';">Edit</button>
+          <button class="overlay-btn delete-btn" style="font-family: 'nanum';">Delete</button>
         </div>
 
         <div>

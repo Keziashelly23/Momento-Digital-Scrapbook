@@ -4,26 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Scrapbook</title>
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>  
   <div id="left-side">
     <section id="left-content">
       <main class="login">
         <section class="login-section">
-          <h2 style="font-family: momo; font-size: 70px; color: #e13f88; text-align: center; margin-top: 30px;margin-bottom: 0px;">
+          <h2 style="font-family: 'momo'; font-size: 70px; color: #e13f88; text-align: center; margin-top: 30px;margin-bottom: 0px;">
             M<span style="font-style: italic; margin-right: 6px;">♡</span>ment<span style="font-style: italic;">♡</span>
           </h2>
           <img src="images/logo.png" style="width: 125px; display: block; margin: auto;">
-          <p style="font-family: nanum; font-size: 25px; text-align: center; color: #717171;">
+          <p style="font-family: 'nanum'; font-size: 25px; text-align: center; color: #717171;">
             Collect, customize, and celebrate your story!
           </p>
           <div id="authControls">
-            <button id="googleSignIn">Sign in with Google</button>
-            <p id="userStatus">Not signed in</p>
+            <button id="googleSignIn" style="font-family: 'nanum'; font-size: larger;">Sign in with Google ♡</button>
           </div>
         </section>
       </main>
+      <footer>
+        <p>&copy;<span style="font-family: 'nanum'; color: #717171;"> 2025 M♡ment♡. All rights reserved. </span></p>
+      </footer>
     </section>
   </div>
 
@@ -66,5 +70,6 @@
 
   <script src="firebase-config.js"></script>
   <script src="auth.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

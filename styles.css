@@ -1,10 +1,11 @@
 /* ---------------- GLOBAL STYLES ---------------- */
 body {
-  font-family: sans-serif;
+
   background-color: #f4f4f4;
   text-align: center;
   margin: 0;
-  padding: 20px;
+  height: 100vh;
+  display: flex;
 }
 
 h1 {
@@ -17,9 +18,7 @@ h1 {
   background-color: #fff7fb;
   border: 2px solid #ffcce0;
   border-radius: 20px;
-  padding: 40px;
-  width: 400px;
-  margin: 80px auto;
+  padding: 10px;
   box-shadow: 0px 8px 20px rgba(255, 192, 203, 0.3);
 }
 
@@ -38,7 +37,6 @@ h1 {
 
 footer {
   text-align: center;
-  font-family: "nanum", sans-serif;
   color: #777;
   margin-top: 30px;
   font-size: 14px;
@@ -67,35 +65,17 @@ footer {
 
 @font-face {
   font-family: borel;
-  src: url(font/Borel/Borel-Regular.ttf);
+  src: url(fonts/Borel/Borel-Regular.ttf);
 }
 
 @font-face {
   font-family: momo;
-  src: url(font/Momo_Signature/MomoSignature-Regular.ttf);
+  src: url(fonts/Momo_Signature/MomoSignature-Regular.ttf);
 }
 
 @font-face {
   font-family: nanum;
-  src: url(font/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
-}
-
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-}
-
-nav a{
-  background-color: #f4b0c6;
-  border-radius: 40px;
-  border-color: black;
-  text-decoration: none;
-  padding: 10px;
-  color: #494949;
-  font-weight: bold;
-  font-family: nanum;
-  font-size: large;
+  src: url(fonts/Nanum_Pen_Script/NanumPenScript-Regular.ttf);
 }
 
 /* Left and right halves */
@@ -162,4 +142,21 @@ nav a{
 }
 .sticker:active {
   cursor: grabbing;
+}
+
+#googleSignIn{
+  background-color: #ea72a8;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: #e13f88 2px solid;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5%;
+}
+
+#googleSignIn:hover {
+  background: #e13f88;
+  border-color: #c22069;
 }

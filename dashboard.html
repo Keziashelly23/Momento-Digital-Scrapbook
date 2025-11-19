@@ -10,11 +10,13 @@
 <body>
 
   <header>
-    <p id="userGreeting">Loading...</p>
-    <button id="signOutBtn" onclick="signOut()">Sign Out</button>
+    <div id="greeting">
+      <img src="images/logo.png" alt="Momento Logo" style="width: 50px; height: 50px;">
+      <h1 id="userGreeting">Loading...</h1>
+    </div>
+    <div id="signOutBtn" onclick="signOut()"></div>
   </header>
 
-  <h1>My Journals</h1>
   <div id="dashboard" class="dashboard"></div>
 
 <div id="createJournal" class="create-circle-wrapper">
@@ -58,9 +60,9 @@
       </label>
       <br><br>
       <div class="modal-buttons">
-        <button id="editJournalSave">Save</button>
-        <button id="editJournalSkip">Skip</button>
-        <button id="editJournalCancel">Cancel</button>
+        <button id="editJournalSave" style="font-family: 'nanum';">Save</button>
+        <button id="editJournalSkip" style="font-family: 'nanum';">Skip</button>
+        <button id="editJournalCancel" style="font-family: 'nanum';">Cancel</button>
       </div>
     </div>
   </div>
