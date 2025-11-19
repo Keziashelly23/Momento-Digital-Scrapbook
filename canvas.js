@@ -323,8 +323,21 @@ function reinitializeElements() {
     rotate.classList.add("rotate");
     rotate.textContent = "↺";
 
+    // ---- DELETE ----
+    const deleteBtn = document.createElement("div");
+    deleteBtn.classList.add("delete");
+    deleteBtn.textContent = "✗";
+    deleteBtn.title = "Delete";
+
+    deleteBtn.addEventListener("click", () => {
+      frame.remove();
+      saveState();
+      scheduleAutoSave();   // 🔥 keeps deletion after refresh
+    });
+
     frame.appendChild(resize);
     frame.appendChild(rotate);
+    frame.appendChild(deleteBtn);
 
     // rebind dragging/resizing/rotating
     move(frame);
