@@ -11,29 +11,31 @@
   <!-- Sidebar -->
   <aside class="sidebar">
      <button class="tool-btn" id="undoBtn" title="Undo">
-  <img src="images/undo.png" alt="Undo" />
-</button>
+      <img src="images/undoBtn.png" alt="Undo" />
+    </button>
 
-<button class="tool-btn" id="redoBtn" title="Redo">
-  <img src="images/forward.png" alt="Redo" />
-</button>
+    <button class="tool-btn" id="redoBtn" title="Redo">
+      <img src="images/redoBtn.png" alt="Redo" />
+    </button>
 
-<button class="tool-btn" id="addTextBtn" title="Add Text">
-  <img src="images/file.png" alt="Add Text" />
-</button>
+    <button class="tool-btn" id="addTextBtn" title="Add Text">
+      <img src="images/addTextBtn.png" alt="Add Text" />
+    </button>
 
-<button class="tool-btn" id="addImgBtn" title="Add Image">
-  <img src="images/upload.png" alt="Add Image" />
-</button>
+    <button class="tool-btn" id="addImgBtn" title="Add Image">
+      <img src="images/uploadImgBtn.png" alt="Add Image" />
+    </button>
 
-<button class="tool-btn" id="addStickersBtn" title="Add Stickers">
-  <img src="images/happy-face.png" alt="Add Stickers" />
-</button>
-        <!-- this handles getting the image -->
-        <input type="file" id="imgFile" accept="image/png, image.jpeg, image/jpg" style="display: none;">
-      <button class="tool-btn" id="addStickersBtn" title="draw">
-  <img src="images/writing-pencil.png" alt="draw" />
-</button>
+    <button class="tool-btn" id="addStickersBtn" title="Add Stickers">
+      <img src="images/addStickersBtn.png" alt="Add Stickers" />
+    </button>
+    
+    <!-- this handles getting the image -->
+    <input type="file" id="imgFile" accept="image/png, image.jpeg, image/jpg" style="display: none;">
+    
+    <button class="tool-btn" id="exportBtn" title="Export" style="bottom: 30px;">
+      <img src="images/exportBtn.png" alt="export" />
+    </button>
   </aside>
 
   <!-- Main Journal Area -->
@@ -101,6 +103,19 @@
     <button id="boldBtn">B</button>
     <button id="italicBtn">I</button>
     <button id="underlineBtn">U</button>
+  </div>
+
+  <!-- stickers pop up --> 
+   <div id="stickerPopup" class="stickerPopup"> 
+    <div class="sticker-tabs"> 
+      <button class="sticker-tab" data-id="food">🍽️</button> 
+      <button class="sticker-tab" data-id="travel">✈️</button> 
+      <button class="sticker-tab" data-id="book">📖</button> 
+      <button class="sticker-tab" data-id="other">⭐</button> 
+    </div> 
+    <div class="stickerArea" id="stickerArea"> 
+
+    </div> 
   </div>
 
   <script src="canvas.js"></script>
