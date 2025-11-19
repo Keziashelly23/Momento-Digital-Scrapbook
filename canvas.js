@@ -176,6 +176,9 @@ const stickers = {
     "stickers/other/tape-1.png", "stickers/other/tape-2.png",
     "stickers/other/tape-3.png", "stickers/other/tape-4.png",
     "stickers/other/tape-5.png", "stickers/other/tape-6.png"
+  ],
+  letters: [
+    "stickers/other/other-1.png"
   ]
 };
 

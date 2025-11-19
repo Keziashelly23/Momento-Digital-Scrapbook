@@ -366,7 +366,7 @@ b
   border: 1px solid #333;
 }
 
-.resize, .rotate{
+.resize, .rotate, .delete{
   width: 20px;
   height: 20px;
   position: absolute;
@@ -380,14 +380,19 @@ b
 }
 
 .rotate {
-  top: -20px;
+  bottom: -25px;
+  left:50%;
+  transform: translateX(-50%);
+}
+.delete{
+  bottom: -20px;
+  left: 0;
 }
 
-
-.image-frame .resize, .image-frame .rotate{
+.image-frame .resize, .image-frame .rotate, .image-frame .delete{
   display: none;
 }
-.image-frame.active .resize, .image-frame.active .rotate {
+.image-frame.active .resize, .image-frame.active .rotate, .image-frame.active .delete {
   display: block;
 }
 /* button css */
@@ -469,21 +474,3 @@ b
 .image-frame img {
   object-fit: contain;
 }
-.text-delete {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  bottom: -20px;
-  left: 0;
-  font-size: 20px;
-  user-select: none;
-  cursor: pointer;
-  display: none;
-}
-.text-box.selected .text-delete {
-  display: block;
-}
-.text-box.selected {
-  border: 1px solid #333;
-}
-
