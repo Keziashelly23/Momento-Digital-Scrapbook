@@ -372,6 +372,13 @@ async function loadPage(pageNumber) {
             el.style.top = meta.top ? `${meta.top}px` : el.style.top;
             if (meta.rotation) el.style.transform = `rotate(${meta.rotation}deg)`;
           }
+          if (data.pageColor) {
+  leftPage.style.backgroundColor = data.pageColor;
+  rightPage.style.backgroundColor = data.pageColor;
+  leftPage.style.backgroundBlendMode = "multiply";
+  rightPage.style.backgroundBlendMode = "multiply";
+}
+
         });
       }
 
@@ -408,6 +415,7 @@ async function savePageToFirestore(pageNumber) {
       leftHTML: leftPage.innerHTML,
       rightHTML: rightPage.innerHTML,
       paper: extractPaperFromPages(), // either data-src or ''.
+      pageColor: leftPage.style.backgroundColor || "", // save color
       images: collectImagesMetadata(),
       pageNumber,
       owner: currentUser.uid,
