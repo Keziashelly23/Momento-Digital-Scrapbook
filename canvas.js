@@ -120,6 +120,7 @@ function undo() {
   const prevState = history.pop();
   rightPage.innerHTML = prevState;
   reinitializeElements();
+  reinitializeTextBoxes();
   updateButtons();
   scheduleAutoSave();
 }
@@ -130,6 +131,7 @@ function redo() {
   const nextState = redoStack.pop();
   rightPage.innerHTML = nextState;
   reinitializeElements();
+  reinitializeTextBoxes();
   updateButtons();
   scheduleAutoSave();
 }
@@ -398,6 +400,7 @@ async function loadPage(pageNumber) {
       // If image metadata saved, rehydrate image frames to ensure controls exist.
       // If your rightHTML includes <img src="..."> already, we'll attach controls to wrappers.
       reinitializeElements();
+      reinitializeTextBoxes();
 
       // If images metadata exist but HTML doesn't include wrappers (older pages),
       // construct image-frame from metadata:
@@ -450,6 +453,7 @@ async function loadPage(pageNumber) {
   }
 
   reinitializeElements();
+  reinitializeTextBoxes();
   saveState(false); // push initial content into history but don't trigger autosave
 }
 
@@ -547,8 +551,42 @@ addTextBtn.addEventListener('click', () => {
     background: 'transparent',
     border: 'none',
     cursor: 'move',
-    zIndex: 5
+    zIndex: 5,
+    userSelect: 'text',
+    display: 'inline-block',
+    minWidth: '50px',
+    maxWidth: '300px'
   });
+
+  // Add delete button for text box
+  const deleteBtn = document.createElement('div');
+  deleteBtn.classList.add('text-delete');
+  deleteBtn.textContent = '✗';
+  Object.assign(deleteBtn.style, {
+    position: 'absolute',
+    top: '-10px',
+    right: '-10px',
+    background: '#f44336',
+    color: 'white',
+    borderRadius: '50%',
+    width: '18px',
+    height: '18px',
+    textAlign: 'center',
+    lineHeight: '18px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    zIndex: 10,
+    userSelect: 'none',
+    boxShadow: '0 0 4px rgba(0,0,0,0.3)'
+  });
+  deleteBtn.title = 'Delete Text Box';
+  deleteBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    textBox.remove();
+    saveState();
+  });
+  textBox.appendChild(deleteBtn);
+
   rightPage.appendChild(textBox);
 
   enableDragging(textBox);
@@ -1030,4 +1068,47 @@ function saveStateWrapper() { saveState(); }
 
 function generateId(prefix = 'id') {
   return prefix + '_' + Math.random().toString(36).slice(2, 9);
+}
+
+/* -------------------------
+   Reinitialize text boxes to restore draggable and selection behavior after loading or undo/redo
+   ------------------------- */
+function reinitializeTextBoxes() {
+  const textBoxes = rightPage.querySelectorAll('.text-box');
+  textBoxes.forEach(textBox => {
+
+    // Add delete button if doesn't exist already
+    if (!textBox.querySelector('.text-delete')) {
+      const deleteBtn = document.createElement('div');
+      deleteBtn.classList.add('text-delete');
+      deleteBtn.textContent = '✗';
+      Object.assign(deleteBtn.style, {
+        position: 'absolute',
+        top: '-10px',
+        right: '-10px',
+        background: '#f44336',
+        color: 'white',
+        borderRadius: '50%',
+        width: '18px',
+        height: '18px',
+        textAlign: 'center',
+        lineHeight: '18px',
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        zIndex: 10,
+        userSelect: 'none',
+        boxShadow: '0 0 4px rgba(0,0,0,0.3)'
+      });
+      deleteBtn.title = 'Delete Text Box';
+      deleteBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        textBox.remove();
+        saveState();
+      });
+      textBox.appendChild(deleteBtn);
+    }
+
+    enableDragging(textBox);
+    setupSelection(textBox);
+  });
 }
